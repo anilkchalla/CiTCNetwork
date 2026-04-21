@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CRISPR in the Classroom 2026 | Rollins College | June 26–28</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:       #0097A7;
+      --teal-dark:  #00697A;
+      --teal-light: #B2EBF2;
+      --navy:       #0A1628;
+      --navy-mid:   #102040;
+      --gold:       #FFB300;
+      --white:      #FFFFFF;
+      --off-white:  #F4F8FA;
+      --text:       #1C2B3A;
+      --muted:      #5A7080;
+      --border:     #D0E4EA;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ─────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10, 22, 40, 0.97);
+      backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      height: 62px;
+      border-bottom: 2px solid var(--teal);
+    }
+    .nav-logo {
+      font-size: 1rem; font-weight: 800;
+      color: var(--white); letter-spacing: 0.01em;
+    }
+    .nav-logo span { color: var(--teal); }
+    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+    .nav-links a {
+      color: #A8C4CE; text-decoration: none;
+      font-size: 0.85rem; font-weight: 500;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      background: var(--gold); color: var(--navy);
+      padding: 8px 20px; border-radius: 4px;
+      font-weight: 700; font-size: 0.85rem;
+      text-decoration: none; white-space: nowrap;
+      transition: background .2s;
+    }
+    .nav-cta:hover { background: #FFC933; }
+
+    /* ── HERO ────────────────────────────────────────── */
+    .hero {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #0D3348 100%);
+      min-height: 92vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 80px 5% 60px;
+    }
+
+    /* animated DNA-strand background */
+    .dna-bg {
+      position: absolute; inset: 0;
+      overflow: hidden; pointer-events: none;
+    }
+    .dna-bg svg {
+      position: absolute; top: 0; right: -60px;
+      width: 420px; opacity: 0.09;
+      animation: floatY 8s ease-in-out infinite;
+    }
+    .dna-bg svg.left {
+      left: -60px; right: auto;
+      animation-delay: -4s;
+    }
+    @keyframes floatY {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-30px); }
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      background: var(--teal); color: var(--white);
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 6px 16px; border-radius: 3px;
+      margin-bottom: 1.4rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 5.5vw, 4rem);
+      font-weight: 900; color: var(--white);
+      line-height: 1.1; max-width: 800px;
+      margin: 0 auto 0.8rem;
+    }
+    .hero h1 .accent { color: var(--teal); }
+    .hero-sub {
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      color: #8DCFDB; max-width: 600px;
+      margin: 0 auto 0.5rem;
+      font-weight: 500;
+    }
+    .hero-location {
+      font-size: 1rem; color: #6AACBA;
+      margin-bottom: 2.4rem;
+    }
+    .hero-location strong { color: var(--white); }
+
+    /* ── COUNTDOWN ──────────────────────────────────── */
+    .countdown-wrap {
+      display: flex; gap: 1.2rem; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 2rem;
+    }
+    .countdown-unit {
+      text-align: center; min-width: 70px;
+    }
+    .countdown-num {
+      display: block;
+      font-size: clamp(2rem, 4.5vw, 3rem);
+      font-weight: 900; color: var(--white);
+      line-height: 1;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 8px;
+      padding: 12px 10px;
+      min-width: 70px;
+    }
+    .countdown-label {
+      display: block; margin-top: 6px;
+      font-size: 0.7rem; font-weight: 600;
+      color: #6AACBA;
+      text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    .countdown-sep {
+      font-size: 2.5rem; font-weight: 900;
+      color: var(--teal); align-self: center;
+      margin-top: -10px;
+    }
+    .countdown-expired {
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--gold); padding: 12px 20px;
+      background: rgba(255,179,0,.1);
+      border: 1px solid rgba(255,179,0,.3);
+      border-radius: 8px;
+    }
+
+    .hero-cta-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--gold); color: var(--navy);
+      padding: 15px 36px; border-radius: 5px;
+      font-size: 1rem; font-weight: 800;
+      text-decoration: none; letter-spacing: 0.02em;
+      transition: transform .15s, background .2s;
+      box-shadow: 0 4px 20px rgba(255,179,0,.35);
+    }
+    .btn-primary:hover { background: #FFC933; transform: translateY(-2px); }
+    .btn-outline {
+      border: 2px solid #2E6A80; color: #8DCFDB;
+      padding: 13px 28px; border-radius: 5px;
+      font-size: 1rem; font-weight: 600;
+      text-decoration: none;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-outline:hover { border-color: var(--teal); color: var(--white); }
+
+    .hero-deadline {
+      margin-top: 2rem;
+      background: rgba(255,179,0,.1); border: 1px solid rgba(255,179,0,.35);
+      padding: 10px 22px; border-radius: 4px; display: inline-block;
+      font-size: 0.88rem; color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ── STAT STRIP ─────────────────────────────────── */
+    .stat-strip {
+      background: var(--teal-dark);
+      display: flex; justify-content: center;
+      flex-wrap: wrap; gap: 0;
+    }
+    .stat-item {
+      flex: 1; min-width: 160px;
+      text-align: center; padding: 24px 20px;
+      border-right: 1px solid rgba(255,255,255,.15);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-size: 1.8rem; font-weight: 900;
+      color: var(--white); display: block;
+    }
+    .stat-label {
+      font-size: 0.78rem; color: rgba(255,255,255,.7);
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+
+    /* ── SECTIONS ───────────────────────────────────── */
+    section { padding: 80px 5%; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+
+    .section-tag {
+      display: inline-block;
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--teal); margin-bottom: 0.7rem;
+    }
+    h2 {
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      font-weight: 800; color: var(--navy);
+      line-height: 1.2; margin-bottom: 1rem;
+    }
+    .lead {
+      font-size: 1.08rem; color: var(--muted);
+      max-width: 720px; margin-bottom: 2rem;
+    }
+
+    /* ── ABOUT ──────────────────────────────────────── */
+    #about { background: var(--off-white); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem; align-items: start;
+      margin-top: 2.5rem;
+    }
+    @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
+
+    .about-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 2rem;
+      border-top: 4px solid var(--teal);
+    }
+    .about-card h3 {
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--navy); margin-bottom: 0.7rem;
+    }
+    .about-card p {
+      font-size: 0.95rem; color: var(--muted); line-height: 1.7;
+    }
+    .nsf-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #EBF5FF; border: 1px solid #BFDBFE;
+      border-radius: 4px; padding: 8px 14px;
+      font-size: 0.8rem; font-weight: 600; color: #1D4ED8;
+      margin-top: 1rem;
+    }
+
+    /* ── WHY ATTEND ─────────────────────────────────── */
+    #why { background: var(--white); }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem; margin-top: 2.5rem;
+    }
+    @media (max-width: 900px) {
+      .why-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .why-grid { grid-template-columns: 1fr; }
+    }
+    .why-card {
+      background: var(--off-white);
+      border-radius: 10px; padding: 1.8rem 1.5rem;
+      border-left: 4px solid var(--teal);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .why-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,151,167,.1); }
+    .why-icon { font-size: 2rem; margin-bottom: 0.8rem; }
+    .why-card h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; }
+    .why-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── AGENDA ─────────────────────────────────────── */
+    #agenda { background: var(--navy); }
+    #agenda h2 { color: var(--white); }
+    #agenda .section-tag { color: var(--teal); }
+    #agenda .lead { color: #7BAFC0; }
+
+    .agenda-days {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem; margin-top: 2.5rem;
+    }
+    .day-card {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 10px; overflow: hidden;
+    }
+    .day-header {
+      background: var(--teal-dark);
+      padding: 1rem 1.4rem;
+    }
+    .day-header .day-label {
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--teal-light); margin-bottom: 2px;
+    }
+    .day-header h3 {
+      font-size: 1.1rem; font-weight: 800; color: var(--white);
+    }
+    .day-body { padding: 1.2rem 1.4rem; }
+    .agenda-item {
+      display: flex; gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+    .agenda-item:last-child { border-bottom: none; }
+    .agenda-time {
+      font-size: 0.75rem; font-weight: 700;
+      color: var(--teal); min-width: 90px;
+      padding-top: 2px;
+    }
+    .agenda-desc {
+      font-size: 0.88rem; color: #A8C4CE; line-height: 1.5;
+    }
+    .agenda-desc strong { color: var(--white); }
+    .keynote-badge {
+      display: inline-block;
+      background: rgba(255,179,0,.2); color: var(--gold);
+      font-size: 0.7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      padding: 2px 8px; border-radius: 3px;
+      margin-left: 6px; vertical-align: middle;
+    }
+
+    /* ── LOGISTICS ──────────────────────────────────── */
+    #logistics { background: var(--off-white); }
+    .logistics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem; margin-top: 2.5rem;
+    }
+    @media (max-width: 900px) {
+      .logistics-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .logistics-grid { grid-template-columns: 1fr; }
+    }
+    .logistics-card {
+      background: var(--white);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 1.6rem;
+      transition: box-shadow .2s;
+    }
+    .logistics-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,.07); }
+    .logistics-icon {
+      width: 44px; height: 44px;
+      background: var(--teal-light);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 1rem;
+    }
+    .logistics-card h3 {
+      font-size: 0.95rem; font-weight: 700;
+      color: var(--navy); margin-bottom: 0.5rem;
+    }
+    .logistics-card p {
+      font-size: 0.85rem; color: var(--muted); line-height: 1.65;
+    }
+    .logistics-card a { color: var(--teal); text-decoration: none; font-weight: 600; }
+    .logistics-card a:hover { text-decoration: underline; }
+
+    /* ── FAQ ────────────────────────────────────────── */
+    #faq { background: var(--white); }
+    .faq-list { margin-top: 2.5rem; max-width: 820px; }
+    details {
+      border: 1px solid var(--border);
+      border-radius: 8px; margin-bottom: 0.75rem;
+      background: var(--off-white);
+      overflow: hidden;
+      transition: box-shadow .2s;
+    }
+    details[open] { box-shadow: 0 4px 16px rgba(0,151,167,.1); border-color: var(--teal); }
+    summary {
+      padding: 1.1rem 1.4rem;
+      font-size: 0.95rem; font-weight: 700; color: var(--navy);
+      cursor: pointer; list-style: none;
+      display: flex; justify-content: space-between; align-items: center;
+      user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after {
+      content: '+'; font-size: 1.3rem; font-weight: 400;
+      color: var(--teal); transition: transform .2s;
+    }
+    details[open] summary::after { content: '−'; }
+    .faq-answer {
+      padding: 0 1.4rem 1.2rem;
+      font-size: 0.88rem; color: var(--muted); line-height: 1.75;
+    }
+    .faq-answer a { color: var(--teal); font-weight: 600; }
+
+    /* ── REGISTER CTA BAND ──────────────────────────── */
+    .cta-band {
+      background: linear-gradient(135deg, var(--teal-dark), #004D5C);
+      padding: 70px 5%;
+      text-align: center;
+    }
+    .cta-band h2 { color: var(--white); margin-bottom: 0.8rem; }
+    .cta-band p {
+      color: rgba(255,255,255,.7); font-size: 1.05rem;
+      max-width: 580px; margin: 0 auto 2rem;
+    }
+    .cta-band .deadline-note {
+      color: var(--gold); font-size: 0.88rem;
+      font-weight: 600; margin-top: 1.2rem;
+    }
+
+    /* ── FOOTER ─────────────────────────────────────── */
+    footer {
+      background: var(--navy);
+      padding: 40px 5%;
+      text-align: center;
+      border-top: 2px solid var(--teal-dark);
+    }
+    footer p { font-size: 0.82rem; color: #5A7A8A; line-height: 1.8; }
+    footer strong { color: #7BAFC0; }
+    .footer-links { margin: 10px 0; }
+    .footer-links a {
+      color: #5A8A9A; font-size: 0.82rem;
+      text-decoration: none; margin: 0 10px;
+    }
+    .footer-links a:hover { color: var(--teal); }
+
+    /* ── RESPONSIVE NAV ─────────────────────────────── */
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      nav { justify-content: space-between; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ──────────────────────────────────── -->
+<nav>
+  <span class="nav-logo">CiTC <span>2026</span></span>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#why">Why Attend</a></li>
+    <li><a href="#agenda">Agenda</a></li>
+    <li><a href="#logistics">Logistics</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="https://rollins.co1.qualtrics.com/jfe/form/SV_0pJLQrnHIPTRaqW"
+     target="_blank" class="nav-cta">Register Now →</a>
+</nav>
+
+<!-- ── HERO ────────────────────────────────────────── -->
+<section class="hero">
+  <div class="dna-bg">
+    <!-- Right helix -->
+    <svg viewBox="0 0 200 800" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="white" stroke-width="2.5" fill="none">
+        <path d="M40,0 Q160,100 40,200 Q-80,300 40,400 Q160,500 40,600 Q-80,700 40,800"/>
+        <path d="M160,0 Q40,100 160,200 Q280,300 160,400 Q40,500 160,600 Q280,700 160,800"/>
+        <line x1="40" y1="0" x2="160" y2="0"/>
+        <line x1="100" y1="50" x2="100" y2="50"/>
+        <line x1="40" y1="100" x2="160" y2="100" stroke-opacity=".5"/>
+        <line x1="40" y1="200" x2="160" y2="200"/>
+        <line x1="40" y1="300" x2="160" y2="300" stroke-opacity=".5"/>
+        <line x1="40" y1="400" x2="160" y2="400"/>
+        <line x1="40" y1="500" x2="160" y2="500" stroke-opacity=".5"/>
+        <line x1="40" y1="600" x2="160" y2="600"/>
+        <line x1="40" y1="700" x2="160" y2="700" stroke-opacity=".5"/>
+        <line x1="40" y1="800" x2="160" y2="800"/>
+        <circle cx="40" cy="0" r="5" fill="white"/>
+        <circle cx="160" cy="0" r="5" fill="white"/>
+        <circle cx="40" cy="200" r="5" fill="white"/>
+        <circle cx="160" cy="200" r="5" fill="white"/>
+        <circle cx="40" cy="400" r="5" fill="white"/>
+        <circle cx="160" cy="400" r="5" fill="white"/>
+        <circle cx="40" cy="600" r="5" fill="white"/>
+        <circle cx="160" cy="600" r="5" fill="white"/>
+      </g>
+    </svg>
+    <!-- Left helix (mirrored) -->
+    <svg class="left" viewBox="0 0 200 800" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="white" stroke-width="2.5" fill="none">
+        <path d="M40,0 Q160,100 40,200 Q-80,300 40,400 Q160,500 40,600 Q-80,700 40,800"/>
+        <path d="M160,0 Q40,100 160,200 Q280,300 160,400 Q40,500 160,600 Q280,700 160,800"/>
+        <line x1="40" y1="0" x2="160" y2="0"/>
+        <line x1="40" y1="100" x2="160" y2="100" stroke-opacity=".5"/>
+        <line x1="40" y1="200" x2="160" y2="200"/>
+        <line x1="40" y1="300" x2="160" y2="300" stroke-opacity=".5"/>
+        <line x1="40" y1="400" x2="160" y2="400"/>
+        <line x1="40" y1="500" x2="160" y2="500" stroke-opacity=".5"/>
+        <line x1="40" y1="600" x2="160" y2="600"/>
+        <line x1="40" y1="700" x2="160" y2="700" stroke-opacity=".5"/>
+        <line x1="40" y1="800" x2="160" y2="800"/>
+        <circle cx="40" cy="0" r="5" fill="white"/>
+        <circle cx="160" cy="0" r="5" fill="white"/>
+        <circle cx="40" cy="200" r="5" fill="white"/>
+        <circle cx="160" cy="200" r="5" fill="white"/>
+        <circle cx="40" cy="400" r="5" fill="white"/>
+        <circle cx="160" cy="400" r="5" fill="white"/>
+        <circle cx="40" cy="600" r="5" fill="white"/>
+        <circle cx="160" cy="600" r="5" fill="white"/>
+      </g>
+    </svg>
+  </div>
+
+  <div style="position:relative; z-index:1;">
+    <span class="hero-eyebrow">RCN-UBE Conference · NSF Award #2120417</span>
+    <h1>
+      <span class="accent">CRISPR</span> in the<br>Classroom 2026
+    </h1>
+    <p class="hero-sub">Celebrating Innovation in Undergraduate Biology Education</p>
+    <p class="hero-location">
+      <strong>June 26–28, 2026</strong> &nbsp;·&nbsp;
+      Rollins College &nbsp;·&nbsp; Winter Park, Florida
+    </p>
+    <!-- Countdown Clock -->
+    <div style="margin-bottom:0.5rem;">
+      <p style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#6AACBA;margin-bottom:0.8rem;">
+        Registration closes in
+      </p>
+      <div class="countdown-wrap" id="countdown-wrap">
+        <div class="countdown-unit">
+          <span class="countdown-num" id="cd-days">--</span>
+          <span class="countdown-label">Days</span>
+        </div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-unit">
+          <span class="countdown-num" id="cd-hours">--</span>
+          <span class="countdown-label">Hours</span>
+        </div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-unit">
+          <span class="countdown-num" id="cd-mins">--</span>
+          <span class="countdown-label">Minutes</span>
+        </div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-unit">
+          <span class="countdown-num" id="cd-secs">--</span>
+          <span class="countdown-label">Seconds</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-cta-group">
+      <a href="https://rollins.co1.qualtrics.com/jfe/form/SV_0pJLQrnHIPTRaqW"
+         target="_blank" class="btn-primary">Register Now →</a>
+      <a href="#agenda" class="btn-outline">View Agenda</a>
+    </div>
+    <p class="hero-deadline">⏰ Registration deadline: May 1, 2026</p>
+  </div>
+</section>
+
+<!-- ── STAT STRIP ──────────────────────────────────── -->
+<div class="stat-strip">
+  <div class="stat-item">
+    <span class="stat-num">3</span>
+    <span class="stat-label">Days of Programming</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">2</span>
+    <span class="stat-label">Keynote Speakers</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">NSF</span>
+    <span class="stat-label">Award #2120417</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">Open</span>
+    <span class="stat-label">To All Educators</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">Limited</span>
+    <span class="stat-label">Travel Grants Available</span>
+  </div>
+</div>
+
+<!-- ── ABOUT ────────────────────────────────────────── -->
+<section id="about">
+  <div class="section-inner">
+    <span class="section-tag">About the Conference</span>
+    <h2>Where CRISPR Education Meets Community</h2>
+    <p class="lead">
+      CRISPR in the Classroom (CiTC) is a national gathering of undergraduate
+      educators who are transforming how CRISPR–Cas9 gene-editing technology
+      is taught, researched, and experienced in labs and classrooms across the country.
+    </p>
+    <div class="about-grid">
+      <div class="about-card">
+        <h3>What Is CiTC?</h3>
+        <p>
+          CRISPR in the Classroom is a network of educators, researchers, and course
+          designers who integrate CRISPR technology into undergraduate biology
+          education — through lectures, lab modules, Course-Based Undergraduate
+          Research Experiences (CUREs), and interdisciplinary projects.
+          This conference is your chance to showcase your work, learn from peers,
+          and collectively shape the future of CRISPR pedagogy.
+        </p>
+        <a href="https://qubeshub.org/community/groups/crispr_classroom_network"
+           target="_blank"
+           style="display:inline-flex;align-items:center;gap:7px;margin-top:1rem;
+                  background:#EEF7F8;border:1px solid #A8DAE0;border-radius:5px;
+                  padding:9px 14px;font-size:0.82rem;font-weight:700;
+                  color:var(--teal-dark);text-decoration:none;transition:background .2s;"
+           onmouseover="this.style.background='#D4EFF2'"
+           onmouseout="this.style.background='#EEF7F8'">
+          🔗 Join the CiTC Network on QUBES Hub →
+        </a>
+      </div>
+      <div class="about-card">
+        <h3>About RCN-UBE</h3>
+        <p>
+          The Research Coordination Network for Undergraduate Biology Education (RCN-UBE)
+          is an NSF-funded initiative dedicated to building a robust, collaborative
+          community of practice around innovative undergraduate biology teaching.
+          The CiTC conference is a flagship event of the network, bringing together
+          its most influential educators for an intensive weekend of talks, demos,
+          poster sessions, and community-building.
+        </p>
+        <span class="nsf-badge">
+          🔬 NSF Award #2120417
+        </span>
+      </div>
+      <div class="about-card">
+        <h3>Who Should Attend?</h3>
+        <p>
+          This conference is open to <strong>any undergraduate educator</strong> who has
+          used, taught, or developed curriculum around CRISPR technology — whether in
+          traditional lab courses, CUREs, lecture demonstrations, or independent research
+          with students. Graduate students and postdocs involved in undergraduate
+          CRISPR education are also welcome.
+        </p>
+      </div>
+      <div class="about-card">
+        <h3>Why Rollins College?</h3>
+        <p>
+          Nestled in the charming college town of Winter Park, Florida, Rollins College
+          offers a beautiful lakeside campus with excellent conference facilities.
+          Winter Park is renowned for its dining scene, walkable Park Avenue, and
+          proximity to Orlando's cultural and entertainment options — making this
+          the perfect setting for three days of inspiration and collaboration.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHY ATTEND ──────────────────────────────────── -->
+<section id="why">
+  <div class="section-inner">
+    <span class="section-tag">Why Attend</span>
+    <h2>Five Reasons to Join Us at Rollins College</h2>
+    <p class="lead">
+      Whether you are a veteran member of the RCN-UBE network or new to the CRISPR
+      education community, this conference offers something meaningful for every educator.
+    </p>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🎤</div>
+        <h3>Share Your Work</h3>
+        <p>Present your CRISPR classroom innovations — talks, demos, and posters — to a
+          national audience of like-minded educators who will appreciate every detail.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🔬</div>
+        <h3>Hands-On Activities</h3>
+        <p>Participate in hands-on lab refreshers and interactive demos designed to spark
+          new ideas you can bring straight back to your students.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🌐</div>
+        <h3>Build Your Network</h3>
+        <p>Connect with educators from institutions across the country. Collaborative
+          projects, co-authored CUREs, and long-lasting professional friendships
+          are born at events like this.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">💡</div>
+        <h3>Hear Expert Keynotes</h3>
+        <p>Be inspired by leading voices in CRISPR research and education, including
+          a virtual keynote from <strong>Chase Biesel</strong> and additional expert
+          speakers.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🏛️</div>
+        <h3>Shape the Future</h3>
+        <p>Join breakout discussions on the future of research networks, student career
+          preparation, and inclusive CRISPR education in a rapidly changing landscape.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">✈️</div>
+        <h3>Travel Grants Available</h3>
+        <p>A limited number of travel grants are available through NSF funding. Lodging is provided
+          on campus at Rollins' Lakeside Residence Hall at no cost to attendees.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── AGENDA ───────────────────────────────────────── -->
+<section id="agenda">
+  <div class="section-inner">
+    <span class="section-tag">Preliminary Agenda</span>
+    <h2>Three Days of CRISPR Education</h2>
+    <p class="lead">
+      A focused, high-energy weekend at Rollins College — talks, demos, posters,
+      keynotes, and good food in one of Florida's most beautiful college towns.
+    </p>
+    <div class="agenda-days">
+
+      <!-- Day 1 -->
+      <div class="day-card">
+        <div class="day-header">
+          <p class="day-label">Day 1 · Travel &amp; Welcome</p>
+          <h3>Friday, June 26</h3>
+        </div>
+        <div class="day-body">
+          <div class="agenda-item">
+            <span class="agenda-time">All Day</span>
+            <span class="agenda-desc">Travel to MCO or SFB — Uber/Lyft/car rental to Rollins (~30 min)</span>
+          </div>
+          <div class="agenda-item">
+            <span class="agenda-time">5:00–8:00 PM</span>
+            <span class="agenda-desc">
+              <strong>Welcome Mixer</strong><br>
+              Galloway Room, Kathleen W. Rollins Hall<br>
+              Appetizers · Open Bar · Networking with core leadership team
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 2 -->
+      <div class="day-card">
+        <div class="day-header">
+          <p class="day-label">Day 2 · Main Programming</p>
+          <h3>Saturday, June 27</h3>
+        </div>
+        <div class="day-body">
+          <div class="agenda-item">
+            <span class="agenda-time">7:30–8:30 AM</span>
+            <span class="agenda-desc">Breakfast — Campus Center Dining Hall</span>
+          </div>
+          <div class="agenda-item">
+            <span class="agenda-time">8:45–9:00 AM</span>
+            <span class="agenda-desc"><strong>Welcome &amp; Opening Remarks</strong></span>
+          </div>
+          <div class="agenda-item">
+            <span class="agenda-time">9:00–10:30 AM</span>
+            <span class="agenda-desc"><strong>Morning Session</strong> — Talks &amp; Demos</span>
+          </div>
+          <div class="agenda-item">
+            <span class="agenda-time">11:00–11:45 AM</span>
+            <span class="agenda-desc">
+              <strong>Keynote</strong>
+              <span class="keynote-badge">In-Person</span><br>
+              <a href="https://www.helmholtz-hiri.de/en/research/associated-scientists-alumni/people/person/chase-beisel/" target="_blank" style="color:var(--teal);font-weight:600;text-decoration:none;">Chase Beisel</a>
+            </span>
+          </div>
+          <div class="agenda-item">
+            <span class="agenda-time">12:00–1:00 PM</span>
+            <span class="agenda-desc">Lunch — Campus Center Dining Hall</span>
+          </div>
+          <div class="agenda-item">
+            <span class="agenda-time">1:00–2:30 PM</span>
+            <span class="agenda-desc"><strong>Afternoon Session</strong> — Talks &amp; Demos</span>
+          </div>
+          <div class="agenda-item">
+            <span class="agenda-time">2:45–4:15 PM</span>
+            <span class="agenda-desc"><strong>Poster Session</strong></span>
+          </div>
+          <div class="agenda-item">
+            <span class="agenda-time">4:30–5:30 PM</span>
+            <span class="agenda-desc">Demos &amp; Lab Activities</span>
+          </div>
+          <div class="agenda-item">
+            <span class="agenda-time">5:30 PM</span>
+            <span class="agenda-desc">Dinner at Local Winter Park Restaurants</span>
+          </div>
+          <div class="agenda-item">
+            <span class="agenda-time">7:30 PM</span>
+            <span class="agenda-desc">Evening Reception — Ravenous Pig Beer Garden</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 3 -->
+      <div class="day-card">
+        <div class="day-header">
+          <p class="day-label">Day 3 · Keynote &amp; Future Directions</p>
+          <h3>Sunday, June 28</h3>
+        </div>
+        <div class="day-body">
+          <div class="agenda-item">
+            <span class="agenda-time">7:30–8:30 AM</span>
+            <span class="agenda-desc">Breakfast — Campus Center Dining Hall</span>
+          </div>
+          <div class="agenda-item">
+            <span class="agenda-time">8:45–9:00 AM</span>
+            <span class="agenda-desc"><strong>Welcoming Remarks</strong></span>
+          </div>
+          <div class="agenda-item">
+            <span class="agenda-time">9:00–10:00 AM</span>
+            <span class="agenda-desc">
+              <strong>Keynote</strong>
+              <span class="keynote-badge">Virtual</span><br>
+              <a href="https://www.bioc.uzh.ch/en/research/research-groups/jinek.html" target="_blank" style="color:var(--teal);font-weight:600;text-decoration:none;">Martin Jinek</a>
+            </span>
+          </div>
+          <div class="agenda-item">
+            <span class="agenda-time">10:00–10:15 AM</span>
+            <span class="agenda-desc">Break</span>
+          </div>
+          <div class="agenda-item">
+            <span class="agenda-time">10:15–11:30 AM</span>
+            <span class="agenda-desc">
+              <strong>Breakouts &amp; Large Group Discussion</strong><br>
+              "Future of Networks, Career Preparation, and Student Training"
+            </span>
+          </div>
+          <div class="agenda-item">
+            <span class="agenda-time">Afternoon</span>
+            <span class="agenda-desc">Departure — Safe travels home</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── LOGISTICS ─────────────────────────────────────── -->
+<section id="logistics">
+  <div class="section-inner">
+    <span class="section-tag">Logistics &amp; Travel</span>
+    <h2>The Nuts and Bolts</h2>
+    <p class="lead">
+      We have done our best to make travel easy and comfortable. Here is a quick
+      overview — see the FAQ below for more detail on each topic.
+    </p>
+    <div class="logistics-grid">
+
+      <div class="logistics-card">
+        <div class="logistics-icon">✈️</div>
+        <h3>Getting Here</h3>
+        <p>
+          Two airports serve Rollins College:
+          <strong>Orlando International (MCO)</strong> — major airlines, ~30 min drive — and
+          <strong>Sanford International (SFB)</strong> — discount carriers (Allegiant Air),
+          ~30 min drive. Both offer Uber/Lyft and car rentals.
+        </p>
+      </div>
+
+      <div class="logistics-card">
+        <div class="logistics-icon">🏠</div>
+        <h3>Lodging on Campus</h3>
+        <p>
+          Attendees stay in <strong>Lakeside Residence Hall</strong>, Rollins' nicest
+          dorms. Apartment-style units with private rooms, private bathrooms,
+          and a shared common space (4 people/unit).
+          <strong>Bring your own linens.</strong>
+        </p>
+      </div>
+
+      <div class="logistics-card">
+        <div class="logistics-icon">🚗</div>
+        <h3>Driving &amp; Parking</h3>
+        <p>
+          Parking passes are available at two covered decks:
+          <strong>Truist Parking Garage</strong> and <strong>Rollins Parking Garage</strong>.
+          Request a pass when you register.
+          Campus address: <strong>1000 Holt Ave, Winter Park, FL 32789</strong>.
+        </p>
+      </div>
+
+      <div class="logistics-card">
+        <div class="logistics-icon">🍽️</div>
+        <h3>Food &amp; Dining</h3>
+        <p>
+          Meals split between the <strong>campus dining hall</strong>
+          (most dietary restrictions accommodated) and
+          <strong>local Winter Park restaurants</strong>. Winter Park is an acclaimed
+          food destination — your Uber driver will have excellent recommendations.
+        </p>
+      </div>
+
+      <div class="logistics-card">
+        <div class="logistics-icon">🌦️</div>
+        <h3>Weather in Florida</h3>
+        <p>
+          Expect hot, humid mornings with afternoon thunderstorms typical of Florida
+          summer (around 3:00 PM). Pack lightweight, breathable clothing and
+          <strong>bring an umbrella or rain jacket</strong>. Evenings are warm and pleasant.
+        </p>
+      </div>
+
+      <div class="logistics-card">
+        <div class="logistics-icon">💰</div>
+        <h3>Travel Grants</h3>
+        <p>
+          A limited number of travel grants are available through NSF funding. Contact
+          <strong>Dr. Donna Pattison (University of Houston)</strong> as soon as possible after registering to receive
+          UH reimbursement paperwork and begin the process.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ──────────────────────────────────────────── -->
+<section id="faq">
+  <div class="section-inner">
+    <span class="section-tag">Frequently Asked Questions</span>
+    <h2>Your Questions, Answered</h2>
+    <p class="lead">Still have questions? Reach out to the conference organizers directly.</p>
+
+    <div class="faq-list">
+
+      <details>
+        <summary>What accommodations are available on campus?</summary>
+        <div class="faq-answer">
+          We have reserved Lakeside Residence Hall — the nicest dorms on campus. These
+          are apartment-style units where each person has their own private room and
+          private bathroom, with a shared common space. Each unit houses 4 individuals.
+          <strong>Important: You must bring your own linens.</strong> There are nearby
+          hotels available; however, those within walking distance of campus are quite
+          expensive and not covered by our grant. One enjoyable alternative is the
+          <em>Alfond Inn Art Tour</em>, which features an extensive rotating private
+          art collection.
+        </div>
+      </details>
+
+      <details>
+        <summary>What is the best way to get to Rollins College?</summary>
+        <div class="faq-answer">
+          Orlando has two major airports: <strong>Orlando International (MCO)</strong>,
+          which handles all major airlines, and <strong>Sanford International (SFB)</strong>,
+          which serves mostly discount/à la carte carriers (Allegiant Air is their
+          largest airline). Both MCO and SFB are approximately a 30–35-minute drive
+          to the Rollins campus. Lyft, Uber, and taxi service are available at both
+          airports. Car rental is also available at each airport.
+        </div>
+      </details>
+
+      <details>
+        <summary>Can I drive to Rollins College?</summary>
+        <div class="faq-answer">
+          Yes! Parking passes will be available to park in one of the campus parking
+          decks for the duration of the conference. The two options are the
+          <strong>Truist Parking Garage</strong> and the <strong>Rollins Parking Garage</strong>.
+          Either may be used, and both offer mostly covered parking. Request your
+          parking pass when you register.
+        </div>
+      </details>
+
+      <details>
+        <summary>Can I bring my family?</summary>
+        <div class="faq-answer">
+          Orlando is a wonderful family destination! However, we cannot house families
+          in the on-campus conference lodging. The beach is about an hour from campus
+          and the major theme parks are a 30–45-minute drive depending on traffic.
+          If you wish to bring your family, we recommend having them join you in Orlando
+          after the conference concludes on Sunday, or meeting up at another location
+          after the event.
+        </div>
+      </details>
+
+      <details>
+        <summary>What will the food be like?</summary>
+        <div class="faq-answer">
+          Meals are split between the on-campus dining service (which can accommodate
+          most dietary restrictions) and local Winter Park restaurants. Winter Park has
+          a well-deserved reputation as a top dining destination in the Orlando metro area —
+          with excellent options just a short walk from campus. Orlando is also known as
+          a foodie city with several Michelin-starred restaurants, and many of the best
+          spots are tucked away in strip malls and off-the-beaten-path locations. Ask
+          your Uber driver for their personal favorites!
+        </div>
+      </details>
+
+      <details>
+        <summary>What should I expect weather-wise?</summary>
+        <div class="faq-answer">
+          Florida in June means hot, humid days. Summer is also rainy season — it
+          typically stays very hot and humid until around 3:00 PM, when a significant
+          rain shower often rolls in for up to an hour, after which conditions improve.
+          Pack lightweight, breathable clothing, sunscreen, and bring an umbrella or
+          compact rain jacket. The evenings are warm and perfect for exploring
+          Winter Park.
+        </div>
+      </details>
+
+      <details>
+        <summary>Is travel reimbursement available?</summary>
+        <div class="faq-answer">
+          Travel reimbursement may be available through the NSF grant. If you are
+          attending and would like to request reimbursement, please contact
+          <strong>Dr. Donna Pattison (University of Houston)</strong> as soon as you register so she can set you up with
+          the UH reimbursement paperwork in a timely manner.
+        </div>
+      </details>
+
+      <details>
+        <summary>What is the registration deadline?</summary>
+        <div class="faq-answer">
+          The registration deadline is <strong>May 1, 2026</strong>. This conference is
+          now open to anyone in your professional network who works with CRISPR
+          in undergraduate education — please share widely!
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── REGISTER CTA BAND ──────────────────────────── -->
+<div class="cta-band">
+  <div class="section-inner" style="text-align:center;">
+    <span class="section-tag" style="color:var(--teal-light);">Ready to Join Us?</span>
+    <h2>Secure Your Spot Today</h2>
+    <p>
+      Registration is now open to all educators using CRISPR in undergraduate
+      settings — lectures, labs, CUREs, and beyond. Space is limited.
+    </p>
+    <a href="https://rollins.co1.qualtrics.com/jfe/form/SV_0pJLQrnHIPTRaqW"
+       target="_blank" class="btn-primary">Register Now →</a>
+    <p class="deadline-note">⏰ Registration deadline: May 1, 2026</p>
+  </div>
+</div>
+
+<!-- ── FOOTER ─────────────────────────────────────── -->
+<footer>
+  <p>
+    <strong>CRISPR in the Classroom Conference 2026</strong><br>
+    Rollins College · 1000 Holt Ave, Winter Park, FL 32789<br>
+    June 26–28, 2026
+  </p>
+  <div class="footer-links">
+    <a href="#about">About</a>
+    <a href="#agenda">Agenda</a>
+    <a href="#logistics">Logistics</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://rollins.co1.qualtrics.com/jfe/form/SV_0pJLQrnHIPTRaqW" target="_blank">Register</a>
+  </div>
+  <p>
+    Supported by the National Science Foundation (NSF) through the
+    Research Coordination Network for Undergraduate Biology Education (RCN-UBE).<br>
+    <strong>NSF Award #2120417</strong>
+  </p>
+</footer>
+
+<script>
+  // Countdown to May 1, 2026 11:59:59 PM Eastern
+  const DEADLINE = new Date('2026-05-02T03:59:59Z'); // midnight ET = 04:00 UTC
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function tick() {
+    const now  = new Date();
+    const diff = DEADLINE - now;
+
+    if (diff <= 0) {
+      document.getElementById('countdown-wrap').innerHTML =
+        '<span class="countdown-expired">Registration has closed</span>';
+      return;
+    }
+
+    const days  = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins  = Math.floor((diff % 3600000)  / 60000);
+    const secs  = Math.floor((diff % 60000)    / 1000);
+
+    document.getElementById('cd-days').textContent  = pad(days);
+    document.getElementById('cd-hours').textContent = pad(hours);
+    document.getElementById('cd-mins').textContent  = pad(mins);
+    document.getElementById('cd-secs').textContent  = pad(secs);
+  }
+
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>
