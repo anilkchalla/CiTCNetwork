@@ -1,0 +1,2325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRISPR Cuts — Genome Editing Education Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2236;
+    --accent: #00e5ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --warn: #f59e0b;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --border: rgba(0,229,255,0.15);
+    --font-head: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,14,26,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+
+  .nav-logo {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+  .nav-logo span { color: var(--text); }
+
+  .nav-links {
+    display: flex; gap: 0;
+    list-style: none;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 0.4rem 0.9rem;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+    border-radius: 4px;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-badge {
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    background: rgba(0,229,255,0.1);
+    color: var(--accent);
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.7rem;
+    border-radius: 20px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 80px 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image:
+      linear-gradient(rgba(0,229,255,1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,1) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    animation: pulse 6s ease-in-out infinite;
+  }
+
+  .hero-glow2 {
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,229,255,0.1) 0%, transparent 70%);
+    bottom: 0; left: 200px;
+    animation: pulse 8s ease-in-out infinite 2s;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.7; }
+  }
+
+  .hero-content { position: relative; max-width: 900px; }
+
+  .hero-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(0,229,255,0.08);
+    border: 1px solid rgba(0,229,255,0.3);
+    padding: 0.35rem 0.9rem;
+    border-radius: 3px;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  h1 {
+    font-family: var(--font-head);
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    animation: fadeUp 0.6s ease 0.1s both;
+  }
+
+  h1 .cut { color: var(--accent); }
+  h1 .dim { color: var(--muted); }
+
+  .hero-sub {
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 540px;
+    line-height: 1.7;
+    animation: fadeUp 0.6s ease 0.2s both;
+  }
+
+  .hero-actions {
+    margin-top: 2.5rem;
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    animation: fadeUp 0.6s ease 0.3s both;
+  }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+  }
+  .btn-primary:hover { background: #33ecff; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,229,255,0.3); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-stats {
+    margin-top: 4rem;
+    display: flex; gap: 3rem; flex-wrap: wrap;
+    animation: fadeUp 0.6s ease 0.4s both;
+  }
+
+  .stat { }
+  .stat-n {
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 0.2rem;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── SECTION SHARED ─── */
+  section { padding: 6rem 4rem; }
+  .section-tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  h2 {
+    font-family: var(--font-head);
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .section-lead {
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.75;
+    margin-bottom: 3rem;
+  }
+
+  /* ─── ABOUT / OVERVIEW ─── */
+  #overview { background: var(--surface); }
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+    margin-top: 3rem;
+  }
+
+  .overview-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .overview-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .overview-card h3 {
+    font-family: var(--font-head);
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--accent);
+  }
+
+  .overview-card p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ─── CCR5 GENE MAP ─── */
+  #gene {
+    background: var(--bg);
+  }
+
+  .gene-table-wrap {
+    overflow-x: auto;
+    margin-top: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+
+  thead th {
+    background: rgba(0,229,255,0.08);
+    padding: 0.9rem 1.2rem;
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+  }
+
+  tbody td {
+    padding: 0.85rem 1.2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  tbody tr:hover td { background: rgba(0,229,255,0.03); }
+
+  tbody td:first-child {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .highlight-row td { background: rgba(124,58,237,0.08) !important; }
+
+  /* ─── GENE DIAGRAM ─── */
+  .gene-diagram {
+    margin: 3rem 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+  }
+
+  .gene-diagram-title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .gene-track {
+    position: relative;
+    height: 60px;
+    margin: 1rem 0;
+  }
+
+  .gene-line {
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    height: 4px;
+    background: rgba(100,116,139,0.4);
+    border-radius: 2px;
+    transform: translateY(-50%);
+  }
+
+  .exon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 32px;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #000;
+  }
+
+  .exon1 { left: 2%; width: 12%; background: var(--accent); }
+  .exon2 { left: 40%; width: 5%; background: var(--warn); }
+  .exon3 { left: 86%; width: 8%; background: var(--accent3); }
+
+  .cut-site {
+    position: absolute;
+    top: 0; bottom: 0;
+    display: flex; flex-direction: column; align-items: center;
+  }
+
+  .cut-arrow {
+    font-size: 1.2rem;
+    color: #ef4444;
+  }
+
+  .cut-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: #ef4444;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+
+  .cut-g1 { left: 42%; top: -20px; }
+  .cut-gjk { left: 44%; top: -20px; }
+
+  .legend {
+    display: flex; gap: 2rem; flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+
+  .legend-item {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 2px;
+  }
+
+  /* ─── WORKFLOW ─── */
+  #workflow { background: var(--surface); }
+
+  .workflow-steps {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 0 2rem;
+    position: relative;
+  }
+
+  .step-left {
+    display: flex; flex-direction: column; align-items: center;
+  }
+
+  .step-num {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .step-line {
+    width: 2px;
+    flex: 1;
+    background: var(--border);
+    margin: 6px 0;
+    min-height: 40px;
+  }
+
+  .step-content {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.3s;
+  }
+  .step-content:hover { border-color: var(--accent); }
+
+  .step-title {
+    font-family: var(--font-head);
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+
+  .step-desc {
+    font-size: 0.87rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .step-meta {
+    margin-top: 0.75rem;
+    display: flex; gap: 0.5rem; flex-wrap: wrap;
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+
+  .tag-cyan { background: rgba(0,229,255,0.1); color: var(--accent); border: 1px solid rgba(0,229,255,0.3); }
+  .tag-purple { background: rgba(124,58,237,0.12); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); }
+  .tag-green { background: rgba(16,185,129,0.1); color: var(--accent3); border: 1px solid rgba(16,185,129,0.3); }
+  .tag-amber { background: rgba(245,158,11,0.1); color: var(--warn); border: 1px solid rgba(245,158,11,0.3); }
+
+  /* ─── GUIDES TABLE ─── */
+  #guides { background: var(--bg); }
+
+  /* ─── ETHICS ─── */
+  #ethics { background: var(--surface); }
+
+  .ethics-card {
+    background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(0,229,255,0.05));
+    border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 12px;
+    padding: 2.5rem;
+    max-width: 750px;
+    margin-bottom: 2rem;
+  }
+
+  .ethics-card p {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  .ethics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .ethics-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+  }
+
+  .ethics-item h4 {
+    font-family: var(--font-head);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .ethics-item p {
+    font-size: 0.83rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* ─── RESOURCES ─── */
+  #resources { background: var(--bg); }
+
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .resource-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: all 0.25s;
+    text-decoration: none;
+    display: block;
+  }
+  .resource-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.4); }
+
+  .resource-type {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+
+  .resource-card h4 {
+    font-family: var(--font-head);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+
+  .resource-card p {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .resource-link {
+    margin-top: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+  }
+
+  /* ─── TEACHER TOOLS ─── */
+  #teacher { background: var(--surface); }
+
+  .teacher-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 2.5rem;
+  }
+
+  .teacher-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .teacher-card-header {
+    padding: 1.25rem 1.5rem;
+    background: rgba(0,229,255,0.06);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+
+  .teacher-card-header h3 {
+    font-family: var(--font-head);
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .teacher-card-body {
+    padding: 1.5rem;
+  }
+
+  .checklist {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+
+  .checklist li {
+    display: flex; align-items: flex-start; gap: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .checklist li::before {
+    content: '▸';
+    color: var(--accent3);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ─── KIT TABLE ─── */
+  #kit { background: var(--bg); }
+
+  .kit-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .kit-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .kit-section-head {
+    background: rgba(0,229,255,0.07);
+    padding: 0.85rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .kit-items {
+    padding: 1.25rem;
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+
+  .kit-item {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .kit-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent3);
+    flex-shrink: 0;
+  }
+
+  /* ─── GLOSSARY ─── */
+  #glossary { background: var(--surface); }
+
+  .glossary-search {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    max-width: 500px;
+  }
+
+  .glossary-search input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.65rem 1rem;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .glossary-search input:focus { border-color: var(--accent); }
+  .glossary-search input::placeholder { color: var(--muted); }
+
+  .glossary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+
+  .glossary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.1rem;
+    transition: border-color 0.2s;
+  }
+  .glossary-item:hover { border-color: rgba(0,229,255,0.4); }
+
+  .glossary-term {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.03em;
+  }
+
+  .glossary-def {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .glossary-item.hidden { display: none; }
+
+  /* ─── QUIZ ─── */
+  #quiz { background: var(--bg); }
+
+  .quiz-container {
+    max-width: 680px;
+    margin-top: 2rem;
+  }
+
+  .quiz-progress {
+    display: flex; gap: 0.4rem; margin-bottom: 2rem;
+  }
+
+  .quiz-dot {
+    height: 4px; flex: 1;
+    background: var(--surface);
+    border-radius: 2px;
+    transition: background 0.3s;
+  }
+  .quiz-dot.active { background: var(--accent); }
+  .quiz-dot.done { background: var(--accent3); }
+
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+  }
+
+  .quiz-q {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: var(--text);
+  }
+
+  .quiz-options {
+    display: flex; flex-direction: column; gap: 0.7rem;
+  }
+
+  .quiz-option {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.85rem 1.1rem;
+    font-size: 0.87rem;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+  }
+  .quiz-option:hover { border-color: var(--accent); color: var(--text); }
+  .quiz-option.correct { border-color: var(--accent3); background: rgba(16,185,129,0.08); color: var(--accent3); }
+  .quiz-option.incorrect { border-color: #ef4444; background: rgba(239,68,68,0.08); color: #f87171; }
+
+  .quiz-feedback {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+    display: none;
+    padding: 0.85rem 1rem;
+    border-radius: 6px;
+    background: rgba(0,229,255,0.05);
+    border: 1px solid var(--border);
+  }
+
+  .quiz-feedback.show { display: block; }
+
+  .quiz-nav {
+    margin-top: 1.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .quiz-score {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  /* ─── ACTIVITY QUIZ DROPDOWN ─── */
+  .activity-quiz {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 0.3rem 0.5rem;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .activity-quiz:focus { border-color: var(--accent); }
+  .activity-quiz.correct { border-color: var(--accent3); background: rgba(16,185,129,0.08); color: var(--accent3); }
+  .activity-quiz.incorrect { border-color: #ef4444; background: rgba(239,68,68,0.08); color: #f87171; }
+  .activity-feedback { font-size:0.68rem; font-family:var(--font-mono); margin-left:0.4rem; }
+  .activity-feedback.ok { color: var(--accent3); }
+  .activity-feedback.no { color: #ef4444; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 3rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .footer-brand {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--accent);
+  }
+
+  .footer-note {
+    font-size: 0.78rem;
+    color: var(--muted);
+    max-width: 400px;
+    line-height: 1.6;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav .nav-links { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .hero { padding: 80px 1.5rem 3rem; }
+    .overview-grid, .teacher-grid, .kit-two-col, .ethics-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">CRISPR<span>Cuts</span> ✂</div>
+  <ul class="nav-links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#background">Background</a></li>
+    <li><a href="#gene">Gene Analysis</a></li>
+    <li><a href="#workflow">Workflow</a></li>
+    <li><a href="#guides">Guides</a></li>
+    <li><a href="#ethics">Ethics</a></li>
+    <li><a href="#resources">Resources</a></li>
+    <li><a href="#teacher">Teachers</a></li>
+    <li><a href="#glossary">Glossary</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+    <li><a href="#oligo" style="color:var(--warn)">⚗ Oligo Designer</a></li>
+  </ul>
+  <div class="nav-badge">v2025 · CCR5 Module</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-tag">▸ CRISPR / Cas9 · Genome Engineering Education</div>
+    <h1>CRISPR<br><span class="cut">Cuts</span><br><span class="dim">Lab Manual</span></h1>
+    <p class="hero-sub">A hands-on, in-vitro genome editing module exploring CCR5 sgRNA design, nuclease activity, mismatch tolerance, and bioethics — scaffolded around the landmark Jiankui He experiment.</p>
+    <div class="hero-actions">
+      <a href="#workflow" class="btn btn-primary">▸ Start the Lab</a>
+      <a href="#resources" class="btn btn-secondary">Resources →</a>
+      <a href="#teacher" class="btn btn-secondary">Teacher Guide →</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n">8</div><div class="stat-label">sgRNA Guides</div></div>
+      <div class="stat"><div class="stat-n">3</div><div class="stat-label">Lab Modules</div></div>
+      <div class="stat"><div class="stat-n">CCR5</div><div class="stat-label">Target Gene</div></div>
+      <div class="stat"><div class="stat-n">6 kb</div><div class="stat-label">Gene Length</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- BACKGROUND STORY -->
+<section id="background" style="background:var(--surface)">
+  <div class="section-tag">// BACKGROUND</div>
+  <h2>The Science &amp; The Story</h2>
+  <p class="section-lead">This module is grounded in two parallel narratives — the revolutionary science of CRISPR-Cas9 genome editing, and the landmark ethical crisis it precipitated.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem">
+
+    <!-- CRISPR Background Box -->
+    <div style="background:linear-gradient(135deg,rgba(0,229,255,0.07),rgba(0,229,255,0.02));border:1px solid rgba(0,229,255,0.25);border-radius:14px;padding:2rem">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem">
+        <div style="width:40px;height:40px;border-radius:8px;background:rgba(0,229,255,0.15);display:flex;align-items:center;justify-content:center;font-size:1.3rem">🧬</div>
+        <div>
+          <div style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent)">The Science</div>
+          <div style="font-family:var(--font-head);font-size:1.15rem;font-weight:800">CRISPR-Cas9: A Bacterial Immune System Becomes a Genome Editor</div>
+        </div>
+      </div>
+      <div style="font-size:0.87rem;color:var(--muted);line-height:1.8">
+        <p style="margin-bottom:0.85rem">CRISPR (Clustered Regularly Interspaced Short Palindromic Repeats) was first recognized in bacteria as an adaptive immune memory — a molecular archive of past viral invaders. When scientists discovered that the Cas9 protein could be reprogrammed with a synthetic guide RNA to cut any DNA sequence, the implications were transformative.</p>
+        <p style="margin-bottom:0.85rem">Jennifer Doudna and Emmanuelle Charpentier demonstrated programmable in vitro DNA cleavage by Cas9 in 2012, work for which they received the 2020 Nobel Prize in Chemistry. The system requires only two components: the Cas9 nuclease and a 20-nucleotide guide RNA (sgRNA) that matches the target sequence, plus an NGG protospacer adjacent motif (PAM) in the genome.</p>
+        <p>The resulting double-strand break is repaired by cellular mechanisms — error-prone NHEJ (causing gene disruption) or precise HDR (enabling exact corrections). This simplicity and versatility sparked a revolution across medicine, agriculture, and basic research.</p>
+      </div>
+      <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(0,229,255,0.15)">
+        <div style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem">Key Timeline</div>
+        <div style="display:flex;flex-direction:column;gap:0.4rem;font-size:0.78rem">
+          <div style="display:flex;gap:0.75rem"><span style="color:var(--accent);font-family:var(--font-mono);font-weight:700;flex-shrink:0">1987</span><span style="color:var(--muted)">CRISPR sequences first observed in E. coli (Ishino et al.)</span></div>
+          <div style="display:flex;gap:0.75rem"><span style="color:var(--accent);font-family:var(--font-mono);font-weight:700;flex-shrink:0">2007</span><span style="color:var(--muted)">CRISPR proven to be adaptive immune memory in bacteria</span></div>
+          <div style="display:flex;gap:0.75rem"><span style="color:var(--accent);font-family:var(--font-mono);font-weight:700;flex-shrink:0">2012</span><span style="color:var(--muted)">Doudna &amp; Charpentier — programmable Cas9 genome editing</span></div>
+          <div style="display:flex;gap:0.75rem"><span style="color:var(--accent);font-family:var(--font-mono);font-weight:700;flex-shrink:0">2013</span><span style="color:var(--muted)">Zhang lab — first CRISPR editing in human cells</span></div>
+          <div style="display:flex;gap:0.75rem"><span style="color:var(--accent);font-family:var(--font-mono);font-weight:700;flex-shrink:0">2020</span><span style="color:var(--muted)">Nobel Prize in Chemistry: Doudna &amp; Charpentier</span></div>
+          <div style="display:flex;gap:0.75rem"><span style="color:var(--accent);font-family:var(--font-mono);font-weight:700;flex-shrink:0">2023</span><span style="color:var(--muted)">First FDA-approved CRISPR therapy (Casgevy, sickle cell)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JK Twins Box -->
+    <div style="background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(124,58,237,0.03));border:1px solid rgba(124,58,237,0.3);border-radius:14px;padding:2rem">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem">
+        <div style="width:40px;height:40px;border-radius:8px;background:rgba(124,58,237,0.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem">⚖️</div>
+        <div>
+          <div style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:#a78bfa">The Controversy</div>
+          <div style="font-family:var(--font-head);font-size:1.15rem;font-weight:800">The CRISPR Twins: Lulu, Nana, &amp; the He Jiankui Affair</div>
+        </div>
+      </div>
+      <div style="font-size:0.87rem;color:var(--muted);line-height:1.8">
+        <p style="margin-bottom:0.85rem">In November 2018, He Jiankui — a biophysicist trained at Rice University and Stanford — announced at the Second International Summit on Human Genome Editing that he had used CRISPR-Cas9 to edit the CCR5 gene in human embryos, resulting in the birth of twin girls he called "Lulu" and "Nana." A third baby was reported born subsequently.</p>
+        <p style="margin-bottom:0.85rem">He's stated goal was to confer resistance to HIV infection by disrupting CCR5, mimicking the naturally occurring CCR5-Δ32 allele. The experiment was conducted in secret, without peer review, without adequate regulatory oversight, and with consent forms that obscured the experimental nature of the work.</p>
+        <p style="margin-bottom:0.85rem">Genetic analysis revealed the edits were mosaic (not uniform across all cells) and did not precisely replicate the Δ32 allele. Off-target effects were not systematically assessed. The international scientific community responded with immediate and widespread condemnation.</p>
+        <p>He Jiankui was sentenced to three years in prison in 2019. The twins and the third child carry heritable genome modifications whose long-term consequences remain unknown. The case exposed the absence of clear international governance frameworks for germline editing.</p>
+      </div>
+      <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(124,58,237,0.2)">
+        <div style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem">Primary Source — He Lab</div>
+        <div style="display:flex;flex-direction:column;gap:0.6rem">
+          <a href="https://www.youtube.com/@thehelab4617" target="_blank" style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);border-radius:8px;padding:0.65rem 1rem;transition:border-color 0.2s" onmouseover="this.style.borderColor='#a78bfa'" onmouseout="this.style.borderColor='rgba(124,58,237,0.3)'">
+            <span style="font-size:1.1rem">▶</span>
+            <div>
+              <div style="font-size:0.82rem;color:var(--text);font-weight:500">The He Lab — YouTube Channel</div>
+              <div style="font-size:0.72rem;color:var(--muted);font-family:var(--font-mono)">youtube.com/@thehelab4617 · Videos uploaded by He Jiankui prior to his arrest</div>
+            </div>
+          </a>
+          <div style="font-size:0.75rem;color:var(--muted);padding:0.5rem 0.25rem">
+            See the <strong style="color:var(--text)">Resources</strong> section for the Make People Better documentary and Pieczynski &amp; Kee (2021) learning module paper.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="section-tag">// MODULE OVERVIEW</div>
+  <h2>What You'll Learn</h2>
+  <p class="section-lead">This module walks through CRISPR experiment design from gene annotation to nuclease validation — entirely in vitro, no cell culture required.</p>
+  <div class="overview-grid">
+    <div class="overview-card">
+      <div class="card-icon">🧬</div>
+      <h3>Gene Analysis & Annotation</h3>
+      <p>Retrieve CCR5 from NCBI, map its exon-intron structure, identify functional protein domains, and explore clinically relevant variants including the CCR5-Δ32 allele.</p>
+    </div>
+    <div class="overview-card">
+      <div class="card-icon">🎯</div>
+      <h3>sgRNA Design & Scoring</h3>
+      <p>Use in silico tools (Benchling, CRISPOR, CHOPCHOP) to select target sequences near NGG PAM sites, score on-target efficiency, and predict off-target landscapes.</p>
+    </div>
+    <div class="overview-card">
+      <div class="card-icon">⚗️</div>
+      <h3>In Vitro Nuclease Assay</h3>
+      <p>Synthesize 8 sgRNAs by in vitro transcription, reconstitute Cas9 RNP complexes, and assay cleavage of a 724 bp CCR5 Exon 2 PCR amplicon by gel electrophoresis.</p>
+    </div>
+    <div class="overview-card">
+      <div class="card-icon">⚖️</div>
+      <h3>Ethics & Oversight</h3>
+      <p>Engage with the real-world case of Jiankui He's germline editing experiment — critically examining target choice, consent, off-target risks, and IRB oversight.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GENE ANALYSIS -->
+<section id="gene">
+  <div class="section-tag">// TARGET GENE</div>
+  <h2>CCR5 Gene Map</h2>
+  <p class="section-lead">Human CCR5 (C-C Chemokine Receptor 5) — chromosome 3p21.31. A well-annotated GPCR family member and key HIV co-receptor.</p>
+
+  <div class="gene-diagram">
+    <div class="gene-diagram-title">CCR5 Genomic Structure — Chr3:46,370,142–46,376,206 (GRCh38) · ~6 kb</div>
+    <div class="gene-track">
+      <div class="gene-line"></div>
+      <div class="exon exon1">Exon 1<br><span style="font-size:0.6rem;opacity:0.8">478 bp</span></div>
+      <div class="exon exon2">E2<br><span style="font-size:0.6rem">169 bp</span></div>
+      <div class="exon exon3">Exon 3<br><span style="font-size:0.6rem;opacity:0.8">267 bp</span></div>
+      <div class="cut-site cut-g1" style="left:41%;top:-22px;">
+        <div class="cut-arrow">✂</div>
+        <div class="cut-label">Guide 1</div>
+      </div>
+      <div class="cut-site cut-gjk" style="left:45%;top:-22px;">
+        <div class="cut-arrow">✂</div>
+        <div class="cut-label">Guide JK</div>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Exon 1 (478 bp, contains Δ32)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--warn)"></div>Exon 2 — sgRNA target region (169 bp)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--accent3)"></div>Exon 3 (267 bp)</div>
+      <div class="legend-item"><div style="color:#ef4444;font-size:1rem">✂</div>CRISPR cut sites</div>
+    </div>
+  </div>
+
+  <div class="gene-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Details</th>
+          <th>Source</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Genomic location</td><td>Chr3:46,370,142–46,376,206 (GRCh38) · ~6 kb</td><td>NCBI Gene</td></tr>
+        <tr><td>Canonical transcript</td><td>NM_000579.4 / ENST00000292303.9 · 3 exons, 2 introns</td><td>NCBI / Ensembl</td></tr>
+        <tr><td>CDS</td><td>1,056 bp → 352 aa protein</td><td>NCBI Gene</td></tr>
+        <tr><td>Protein family</td><td>GPCR-rhodopsin superfamily; 7-transmembrane domain (aa 40–316)</td><td>InterPro / Pfam</td></tr>
+        <tr class="highlight-row"><td>CCR5-Δ32 variant</td><td>32-bp deletion in Exon 1 (c.794_825del); frameshift → non-functional receptor; ~9% het / ~1% hom in N. Europe — confers HIV-1 (R5) resistance</td><td>rs333</td></tr>
+        <tr><td>Known variants</td><td>&gt;4,000 in NCBI Variation Viewer, including missense rs1800028 (p.Ser336Pro)</td><td>NCBI</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- WORKFLOW -->
+<section id="workflow">
+  <div class="section-tag">// LABORATORY WORKFLOW</div>
+  <h2>Step-by-Step Protocol</h2>
+  <p class="section-lead">Three sequential modules build toward a complete in vitro CRISPR nuclease assay. All 8 sgRNA reactions run in parallel for direct comparison.</p>
+
+  <div class="workflow-steps">
+
+    <div class="step">
+      <div class="step-left"><div class="step-num">01</div><div class="step-line"></div></div>
+      <div class="step-content">
+        <div class="step-title">PCR Amplification of CCR5 Exon 2</div>
+        <div class="step-desc">Amplify the 724 bp CCR5 Exon 2 fragment using genomic DNA template and gene-specific primers (HsCCR5Ex2-gen-F1 / R1). Run 32 cycles with a 62°C annealing step. Prepare master mix for 8 reactions. This PCR product serves as the target DNA substrate for the downstream nuclease assay.</div>
+        <div class="step-meta">
+          <span class="tag tag-cyan">50 µL reaction</span>
+          <span class="tag tag-purple">32 cycles</span>
+          <span class="tag tag-amber">62°C anneal</span>
+          <span class="tag tag-green">724 bp amplicon</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-left"><div class="step-num">02</div><div class="step-line"></div></div>
+      <div class="step-content">
+        <div class="step-title">Step I: dsDNA Template Generation</div>
+        <div class="step-desc">Anneal guide-specific oligos with the tail oligo (95°C → slow ramp at 0.1°C/s). Extend annealed duplexes using T4 DNA Polymerase at 12°C for 45 min to produce double-stranded DNA templates for in vitro transcription. Each of the 8 guides requires its own guide-specific oligo paired with a common tail oligo.</div>
+        <div class="step-meta">
+          <span class="tag tag-cyan">T4 DNA Polymerase</span>
+          <span class="tag tag-purple">12°C · 45 min</span>
+          <span class="tag tag-green">8 templates</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-left"><div class="step-num">03</div><div class="step-line"></div></div>
+      <div class="step-content">
+        <div class="step-title">Step II: sgRNA Synthesis (In Vitro Transcription)</div>
+        <div class="step-desc">Transcribe sgRNAs using T7 RNA Polymerase from the dsDNA templates. Incubate at 37°C for 30–60 min (longer = higher yield). Digest template with RNase-free DNase I, then purify sgRNA with an RNA cleanup column (NEB Monarch® recommended). Optional: verify on TBE-PAGE before and after purification.</div>
+        <div class="step-meta">
+          <span class="tag tag-cyan">T7 RNAP · 37°C</span>
+          <span class="tag tag-purple">DNase treatment</span>
+          <span class="tag tag-green">Column purification</span>
+          <span class="tag tag-amber">Optional PAGE QC</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-left"><div class="step-num">04</div><div class="step-line"></div></div>
+      <div class="step-content">
+        <div class="step-title">Step III: In Vitro Nuclease Assay</div>
+        <div class="step-desc">Reconstitute RNP by combining Cas9 protein + sgRNA in Nuclease Assay Buffer. Add the CCR5 PCR target DNA and incubate at 37°C for 30–60 min. Remove sgRNA with RNase A (5 min, 37°C), then degrade Cas9 with Proteinase K (5 min, 37°C). Analyze cleavage products by 6% TBE-PAGE with UV visualization.</div>
+        <div class="step-meta">
+          <span class="tag tag-cyan">10 µL reaction</span>
+          <span class="tag tag-purple">Cas9 + sgRNA RNP</span>
+          <span class="tag tag-green">6% TBE-PAGE</span>
+          <span class="tag tag-amber">UV transilluminator</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-left"><div class="step-num">05</div></div>
+      <div class="step-content">
+        <div class="step-title">Data Analysis & Mismatch Interpretation</div>
+        <div class="step-desc">Compare cleavage efficiency across all 8 guides — the perfect-match controls (Guide 1, Guide JK) and 6 mismatch variants. Predict fragment sizes based on cut-site positions. Analyze how mismatch position (PAM-proximal vs. PAM-distal) and number of mismatches affect cleavage. Validate predictions using Benchling's mismatch sensitivity tool.</div>
+        <div class="step-meta">
+          <span class="tag tag-cyan">8 sgRNA comparisons</span>
+          <span class="tag tag-green">Benchling analysis</span>
+          <span class="tag tag-amber">PAM-proximal vs distal</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GUIDES TABLE -->
+<section id="guides">
+  <div class="section-tag">// sgRNA GUIDE PANEL</div>
+  <h2>The 8 sgRNA Guides</h2>
+  <p class="section-lead">Two reference guides target distinct CCR5 Exon 2 positions. Six mismatch variants of Guide JK explore how base changes at different positions affect cleavage.</p>
+
+  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:1.5rem 2rem;margin-bottom:2rem">
+      <h4 style="font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:0.85rem">PAM Proximity &amp; Mismatch Sensitivity</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center">
+        <div style="font-size:0.85rem;color:var(--muted);line-height:1.75">
+          <strong style="color:var(--text)">PAM-proximal mismatches</strong> (positions 11–20, near the NGG PAM at the 3' end) severely reduce Cas9 cleavage activity — this is the "seed region."<br><br>
+          <strong style="color:var(--text)">PAM-distal mismatches</strong> (positions 1–10, at the 5' end) are generally better tolerated, producing partial or near-wildtype cleavage.<br><br>
+          <em style="color:var(--accent)">5' end = PAM-distal (left) · 3' end = PAM-proximal (right, adjacent to NGG)</em><br><br>
+          Example: Guide JK pos 3 (G→A in MM#1) is PAM-<strong style="color:var(--text)">distal</strong> — moderate tolerance expected. Pos 9–10 (MM#5) are in the seed region, PAM-<strong style="color:var(--text)">proximal</strong> — activity abolished.
+        </div>
+        <div style="font-family:var(--font-mono);font-size:0.75rem">
+          <div style="margin-bottom:0.6rem;font-size:0.68rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase">Mismatch sensitivity gradient (5'→3')</div>
+          <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">
+            <span style="color:var(--muted);font-size:0.68rem;flex-shrink:0">5'</span>
+            <div style="height:10px;flex:1;background:linear-gradient(90deg,var(--accent3),var(--warn),#ef4444);border-radius:5px;"></div>
+            <span style="color:var(--muted);font-size:0.68rem;flex-shrink:0">3'–NGG</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;color:var(--muted);font-size:0.7rem">
+            <span>Pos 1 — PAM-distal</span><span>Pos 20 — PAM-proximal</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:0.3rem;font-size:0.72rem">
+            <span style="color:var(--accent3)">▲ Tolerant</span><span style="color:#ef4444">▲ HIGH sensitivity</span>
+          </div>
+          <div style="margin-top:1.25rem;padding:0.75rem;background:rgba(0,0,0,0.2);border:1px solid var(--border);border-radius:6px;font-size:0.7rem;color:var(--muted);line-height:1.7">
+            Multiple mismatches act <strong style="color:var(--text)">synergistically</strong> to abolish activity regardless of individual position — see MM#4 and MM#6 in the table below.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="gene-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Guide</th>
+          <th>20-nt Sequence (5'→3')</th>
+          <th>Mismatch Position(s)</th>
+          <th>Predict Activity <span style="font-size:0.6rem;color:var(--warn);font-weight:400">(select your prediction)</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td><td>Guide 1</td>
+          <td style="font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.05em">TCACTATGCTGCCGCCCAGT</td>
+          <td>— (positive control)</td>
+          <td><select class="activity-quiz" data-answer="full" onchange="checkActivity(this)"><option value="">Select prediction…</option><option value="full">Full activity</option><option value="reduced">Reduced</option><option value="moderate">Moderate</option><option value="abolished">Abolished</option></select><span class="activity-feedback"></span></td>
+        </tr>
+        <tr class="highlight-row">
+          <td>2</td><td>Guide JK</td>
+          <td style="font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.05em">CAGAATTGATACTGACTGTA</td>
+          <td>— (positive control)</td>
+          <td><select class="activity-quiz" data-answer="full" onchange="checkActivity(this)"><option value="">Select prediction…</option><option value="full">Full activity</option><option value="reduced">Reduced</option><option value="moderate">Moderate</option><option value="abolished">Abolished</option></select><span class="activity-feedback"></span></td>
+        </tr>
+        <tr>
+          <td>3</td><td>MM #1</td>
+          <td style="font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.05em">CA<strong style="color:#ef4444">A</strong>AATTGATACTGACTGTA</td>
+          <td>Position 3 — PAM-<strong style="color:var(--accent3)">distal</strong></td>
+          <td><select class="activity-quiz" data-answer="reduced" onchange="checkActivity(this)"><option value="">Select prediction…</option><option value="full">Full activity</option><option value="near-full">Near-full</option><option value="reduced">Reduced</option><option value="moderate">Moderate</option><option value="abolished">Abolished</option></select><span class="activity-feedback"></span></td>
+        </tr>
+        <tr>
+          <td>4</td><td>MM #2</td>
+          <td style="font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.05em">CAGAATTGATACTGACT<strong style="color:#ef4444">A</strong>TA</td>
+          <td>Position 18 — PAM-<strong style="color:#ef4444">proximal</strong></td>
+          <td><select class="activity-quiz" data-answer="abolished" onchange="checkActivity(this)"><option value="">Select prediction…</option><option value="full">Full activity</option><option value="near-full">Near-full</option><option value="reduced">Reduced</option><option value="moderate">Moderate</option><option value="abolished">Abolished</option></select><span class="activity-feedback"></span></td>
+        </tr>
+        <tr>
+          <td>5</td><td>MM #3</td>
+          <td style="font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.05em">CAGAATTGAT<strong style="color:#ef4444">G</strong>CTGACTGTA</td>
+          <td>Position 11 — PAM-<strong style="color:#ef4444">proximal</strong></td>
+          <td><select class="activity-quiz" data-answer="reduced" onchange="checkActivity(this)"><option value="">Select prediction…</option><option value="full">Full activity</option><option value="near-full">Near-full</option><option value="reduced">Reduced</option><option value="moderate">Moderate</option><option value="abolished">Abolished</option></select><span class="activity-feedback"></span></td>
+        </tr>
+        <tr>
+          <td>6</td><td>MM #4</td>
+          <td style="font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.05em">CA<strong style="color:#ef4444">A</strong>AATTGATACTGACT<strong style="color:#ef4444">A</strong>TA</td>
+          <td>Pos 3 (distal) + Pos 18 (proximal)</td>
+          <td><select class="activity-quiz" data-answer="reduced" onchange="checkActivity(this)"><option value="">Select prediction…</option><option value="full">Full activity</option><option value="near-full">Near-full</option><option value="reduced">Reduced</option><option value="moderate">Moderate</option><option value="abolished">Abolished</option></select><span class="activity-feedback"></span></td>
+        </tr>
+        <tr>
+          <td>7</td><td>MM #5</td>
+          <td style="font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.05em">CAGAATTGA<strong style="color:#ef4444">CG</strong>CTGACTGTA</td>
+          <td>Pos 9–10 — seed region (PAM-<strong style="color:#ef4444">proximal</strong>)</td>
+          <td><select class="activity-quiz" data-answer="abolished" onchange="checkActivity(this)"><option value="">Select prediction…</option><option value="full">Full activity</option><option value="near-full">Near-full</option><option value="reduced">Reduced</option><option value="moderate">Moderate</option><option value="abolished">Abolished</option></select><span class="activity-feedback"></span></td>
+        </tr>
+        <tr>
+          <td>8</td><td>MM #6</td>
+          <td style="font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.05em">CA<strong style="color:#ef4444">A</strong>AATTGAT<strong style="color:#ef4444">G</strong>CTGACT<strong style="color:#ef4444">A</strong>TA</td>
+          <td>Pos 3 (distal) + Pos 11 + Pos 18 (proximal)</td>
+          <td><select class="activity-quiz" data-answer="abolished" onchange="checkActivity(this)"><option value="">Select prediction…</option><option value="full">Full activity</option><option value="near-full">Near-full</option><option value="reduced">Reduced</option><option value="moderate">Moderate</option><option value="abolished">Abolished</option></select><span class="activity-feedback"></span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:0.78rem;color:var(--muted);margin-top:0.75rem;font-family:var(--font-mono)">ℹ Position numbering: 1 = 5'-most nucleotide (PAM-distal). 20 = 3'-most nucleotide (PAM-proximal, adjacent to NGG).</p>
+
+<!-- ETHICS -->
+<section id="ethics">
+  <div class="section-tag">// BIOETHICS & RESPONSIBILITY</div>
+  <h2>Ethical Analysis</h2>
+  <p class="section-lead">The He Jiankui case — introduced in the Background section — serves as the ethical touchstone for this module. Use the discussion questions below to critically examine each dimension of the experiment.</p>
+
+  <div class="ethics-grid">
+    <div class="ethics-item">
+      <h4>Target Justification</h4>
+      <p>Was CCR5 disruption medically necessary for the children involved? What are the risks of CCR5 loss-of-function beyond HIV resistance? Were there safer alternatives?</p>
+    </div>
+    <div class="ethics-item">
+      <h4>Informed Consent</h4>
+      <p>Germline edits affect not just the individual but all future descendants. How can meaningful consent be obtained for alterations to a genome that cannot be undone?</p>
+    </div>
+    <div class="ethics-item">
+      <h4>Off-Target Risks</h4>
+      <p>Any unintended edit in a germ cell is heritable. What validation would be required before germline CRISPR editing could be considered clinically responsible?</p>
+    </div>
+    <div class="ethics-item">
+      <h4>Regulatory Oversight</h4>
+      <p>He bypassed institutional review. How should international bodies coordinate oversight of technologies with heritable consequences across national boundaries?</p>
+    </div>
+    <div class="ethics-item">
+      <h4>Scientific Transparency</h4>
+      <p>Results were announced via press conference before peer review. What obligations do scientists have to disclose data, especially for high-risk experiments?</p>
+    </div>
+    <div class="ethics-item">
+      <h4>Equity & Access</h4>
+      <p>If genome editing becomes available, who can access it? Could it widen existing inequalities — or be weaponized to enforce genetic norms? Who decides?</p>
+    </div>
+  </div>
+</section>
+
+<!-- RESOURCES -->
+<section id="resources">
+  <div class="section-tag">// CURATED RESOURCES</div>
+  <h2>Learning Resources</h2>
+  <p class="section-lead">Vetted tools and materials — interactive simulations, physical models, primary literature, and documentary film — organized for classroom use.</p>
+
+  <div class="resources-grid">
+    <a class="resource-card" href="https://innovativegenomics.org/education/games-activities/phage-invaders/" target="_blank">
+      <div class="resource-type" style="color:var(--accent3)">🎮 Game · Free</div>
+      <h4>Phage Invaders: A CRISPR Game</h4>
+      <p>Mobile and browser-based game teaching CRISPR adaptive immunity. Ideal for introducing the concept before the lab.</p>
+      <div class="resource-link">innovativegenomics.org →</div>
+    </a>
+
+    <a class="resource-card" href="https://www.biointeractive.org/classroom-resources/crispr-cas9-mechanism-applications" target="_blank">
+      <div class="resource-type" style="color:var(--accent3)">💻 Interactive · Free</div>
+      <h4>CRISPR-Cas9 Mechanism & Applications</h4>
+      <p>HHMI BioInteractive computer and iPhone activity — animated mechanism walkthrough with applications module.</p>
+      <div class="resource-link">biointeractive.org →</div>
+    </a>
+
+    <a class="resource-card" href="https://www.biointeractive.org/classroom-resources/building-paper-model-crispr-cas9" target="_blank">
+      <div class="resource-type" style="color:var(--accent3)">📄 Activity · Free</div>
+      <h4>Building a Paper Model of CRISPR-Cas9</h4>
+      <p>Hands-on physical model activity. Students assemble Cas9 components to internalize the structural mechanism.</p>
+      <div class="resource-link">biointeractive.org →</div>
+    </a>
+
+    <a class="resource-card" href="https://shop.3dmoleculardesigns.com/products/crispr-adaptive-immunity-kit" target="_blank">
+      <div class="resource-type" style="color:var(--warn)">🧩 Physical Kit · $</div>
+      <h4>CRISPR Adaptive Immunity Kit</h4>
+      <p>3D Molecular Designs kit for modeling how CRISPR was discovered in prokaryotic immune systems.</p>
+      <div class="resource-link">3dmoleculardesigns.com →</div>
+    </a>
+
+    <a class="resource-card" href="https://shop.3dmoleculardesigns.com/products/making-the-cut-with-crispr-cas9" target="_blank">
+      <div class="resource-type" style="color:var(--warn)">🧩 Physical Kit · $$</div>
+      <h4>Making the Cut with CRISPR-Cas9</h4>
+      <p>Hands-on model for teaching guide RNA design and Cas9 cutting mechanism to students.</p>
+      <div class="resource-link">3dmoleculardesigns.com →</div>
+    </a>
+
+    <a class="resource-card" href="https://makepeoplebetterfilm.com/" target="_blank">
+      <div class="resource-type" style="color:#a78bfa">🎬 Documentary</div>
+      <h4>Make People Better (Film)</h4>
+      <p>Documentary tracing Jiankui He's path from Stanford postdoc to the first heritable CRISPR edit — essential for the ethics module.</p>
+      <div class="resource-link">makepeoplebetterfilm.com →</div>
+    </a>
+
+    <a class="resource-card" href="https://www.benchling.com/" target="_blank">
+      <div class="resource-type" style="color:var(--accent)">🔬 Tool · Free/Academic</div>
+      <h4>Benchling sgRNA Design</h4>
+      <p>Industry-standard cloud lab platform. Use for guide design, on/off-target scoring, and mismatch sensitivity modeling.</p>
+      <div class="resource-link">benchling.com →</div>
+    </a>
+
+    <a class="resource-card" href="https://www.ncbi.nlm.nih.gov/gene/1234" target="_blank">
+      <div class="resource-type" style="color:var(--accent)">🗃️ Database · Free</div>
+      <h4>NCBI Gene — CCR5</h4>
+      <p>Primary source for CCR5 gene annotation, transcript variants, protein domains, and variant database links.</p>
+      <div class="resource-link">ncbi.nlm.nih.gov →</div>
+    </a>
+
+    <a class="resource-card" href="https://iubmb.onlinelibrary.wiley.com/doi/10.1002/bmb.21395" target="_blank">
+      <div class="resource-type" style="color:#a78bfa">📄 Paper</div>
+      <h4>Pieczynski &amp; Kee (2021)</h4>
+      <p>"Designer babies?!" — A CRISPR-based learning module built around CCR5 for undergraduates. BAMBED 49(1):80–93. The scholarly foundation for this kit.</p>
+      <div class="resource-link">iubmb.onlinelibrary.wiley.com →</div>
+    </a>
+  </div>
+</section>
+
+<!-- TEACHER TOOLS -->
+<section id="teacher">
+  <div class="section-tag">// INSTRUCTOR RESOURCES</div>
+  <h2>Teacher's Corner</h2>
+  <p class="section-lead">Pre-lab logistics, learning objective alignment, discussion facilitation guides, and extension activities.</p>
+
+  <div class="teacher-grid">
+    <div class="teacher-card">
+      <div class="teacher-card-header">
+        <span>📋</span>
+        <h3>Pre-Lab Checklist</h3>
+      </div>
+      <div class="teacher-card-body">
+        <ul class="checklist">
+          <li>Confirm genomic DNA and PCR reagent stocks</li>
+          <li>Order NEB HiScribe T7 Kit and Cas9 protein (allow 1 week lead time)</li>
+          <li>Prepare and label oligo strips for all 8 guides</li>
+          <li>Confirm RNase-free workspace setup and dedicated equipment</li>
+          <li>Cast and pre-run calibration TBE-PAGE gels</li>
+          <li>Assign student groups (recommend 2–3 per guide)</li>
+          <li>Pre-read Pieczynski & Kee (2021) — share with students week prior</li>
+          <li>Assign Benchling tutorial or CRISPOR practice for sgRNA design</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="teacher-card">
+      <div class="teacher-card-header">
+        <span>🎯</span>
+        <h3>Learning Objectives</h3>
+      </div>
+      <div class="teacher-card-body">
+        <ul class="checklist">
+          <li>Retrieve and annotate a human gene using NCBI and Ensembl</li>
+          <li>Design sgRNAs using in silico tools and interpret efficiency scores</li>
+          <li>Synthesize functional sgRNAs by in vitro transcription</li>
+          <li>Reconstitute and test Cas9 RNP nuclease activity</li>
+          <li>Predict and explain mismatch effects on cleavage</li>
+          <li>Evaluate off-target risk using computational predictions</li>
+          <li>Critically analyze ethical dimensions of germline genome editing</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="teacher-card">
+      <div class="teacher-card-header">
+        <span>💬</span>
+        <h3>Ethics Discussion Prompts</h3>
+      </div>
+      <div class="teacher-card-body">
+        <ul class="checklist">
+          <li>Should scientists be imprisoned for violating research ethics norms?</li>
+          <li>At what threshold of off-target risk would germline editing be acceptable?</li>
+          <li>Who should govern international research on heritable human modifications?</li>
+          <li>Is CCR5 Δ32 a "cure" or a genetic modification? Does the distinction matter?</li>
+          <li>How should we weigh benefits to individuals vs. societal risks of germline editing?</li>
+          <li>Compare: somatic vs. germline CRISPR — where should the ethical line be?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="teacher-card">
+      <div class="teacher-card-header">
+        <span>➕</span>
+        <h3>Extensions & Variations</h3>
+      </div>
+      <div class="teacher-card-body">
+        <ul class="checklist">
+          <li>Vary sgRNA:Cas9 molar ratios and compare cleavage efficiency</li>
+          <li>Test influence of incubation time on nuclease activity (15 vs. 60 min)</li>
+          <li>Design novel sgRNAs for CCR5 Exon 1 or Exon 3 and compare</li>
+          <li>Extend mismatch panel: test all possible dinucleotide substitutions at position 9–10</li>
+          <li>Add Benchling computational predictions as a pre-lab deliverable</li>
+          <li>Connect to cell-based editing: discuss how in vitro results translate to cellular context</li>
+          <li>Integrate with NCBI Variation Viewer to explore known off-target sites</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KIT CONTENTS + REAGENTS (MERGED) -->
+<section id="kit" style="background:var(--bg)">
+  <div class="section-tag">// KIT CONTENTS &amp; REAGENT GUIDE</div>
+  <h2>What's in the Kit</h2>
+  <p class="section-lead">Complete inventory of kit-supplied components alongside vendor sourcing, catalog numbers, and pricing for independent procurement. Centrifuge all tubes before use.</p>
+
+  <!-- PCR Primers callout -->
+  <div style="background:linear-gradient(135deg,rgba(16,185,129,0.08),rgba(16,185,129,0.02));border:1px solid rgba(16,185,129,0.3);border-radius:12px;padding:1.5rem 2rem;margin-bottom:2rem">
+    <div style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent3);margin-bottom:1rem">PCR Primers — CCR5 Exon 2 Target Amplicon (Supplied in Kit)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1rem">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem">
+        <div style="font-size:0.62rem;font-family:var(--font-mono);letter-spacing:0.1em;color:var(--muted);margin-bottom:0.4rem">FORWARD — HsCCR5Ex2-gen-F1</div>
+        <div style="font-family:var(--font-mono);font-size:0.85rem;color:var(--accent);letter-spacing:0.06em">5'-GCTCTACTCACTGGTGTTCATC-3'</div>
+        <div style="font-size:0.68rem;color:var(--muted);margin-top:0.3rem">22 nt · 10 µL supplied</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem">
+        <div style="font-size:0.62rem;font-family:var(--font-mono);letter-spacing:0.1em;color:var(--muted);margin-bottom:0.4rem">REVERSE — HsCCR5Ex2-gen-R1</div>
+        <div style="font-family:var(--font-mono);font-size:0.85rem;color:var(--accent);letter-spacing:0.06em">5'-GTCCAACCTGTTAGAGCTACTG-3'</div>
+        <div style="font-size:0.68rem;color:var(--muted);margin-top:0.3rem">22 nt · 10 µL supplied</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:2rem;font-size:0.8rem;color:var(--muted)">
+      <span>Amplicon: <strong style="color:var(--accent3);font-family:var(--font-mono)">724 bp</strong></span>
+      <span>Target: <strong style="color:var(--text)">Human CCR5 Exon 2</strong></span>
+      <span>Annealing Temp: <strong style="color:var(--text)">62°C</strong></span>
+      <span>Cycles: <strong style="color:var(--text)">32</strong></span>
+    </div>
+  </div>
+
+  <!-- Kit inventory two-col -->
+  <div class="kit-two-col" style="margin-bottom:2.5rem">
+    <div>
+      <div class="kit-section">
+        <div class="kit-section-head">PCR — Target DNA Amplification</div>
+        <div class="kit-items">
+          <div class="kit-item"><div class="kit-dot"></div>Genomic DNA (10 µL)</div>
+          <div class="kit-item"><div class="kit-dot"></div>PCR Primers — HsCCR5Ex2-gen-F1/R1 (10 µL each)</div>
+          <div class="kit-item"><div class="kit-dot"></div>2× Taq DNA Polymerase Master Mix (25 µL)</div>
+        </div>
+      </div>
+      <div class="kit-section" style="margin-top:1rem">
+        <div class="kit-section-head">dsDNA Template Generation (IVT)</div>
+        <div class="kit-items">
+          <div class="kit-item"><div class="kit-dot"></div>Guide-specific oligos (1 strip, 1.25 µL each × 8)</div>
+          <div class="kit-item"><div class="kit-dot"></div>Tail oligo — SpCas9 scaffold (10 µL)</div>
+          <div class="kit-item"><div class="kit-dot"></div>Extension Buffer 10× (10 µL)</div>
+          <div class="kit-item"><div class="kit-dot"></div>dNTP Mix (10 µL)</div>
+          <div class="kit-item"><div class="kit-dot"></div>T4 DNA Polymerase (10 µL)</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="kit-section">
+        <div class="kit-section-head">In Vitro Transcription (sgRNA Synthesis)</div>
+        <div class="kit-items">
+          <div class="kit-item"><div class="kit-dot"></div>NTP Buffer Mix (40 µL)</div>
+          <div class="kit-item"><div class="kit-dot"></div>T7 RNA Polymerase Mix (10 µL)</div>
+          <div class="kit-item"><div class="kit-dot"></div>RNase Inhibitor (5 µL)</div>
+          <div class="kit-item"><div class="kit-dot"></div>RNase-free DNase I (5 µL)</div>
+        </div>
+      </div>
+      <div class="kit-section" style="margin-top:1rem">
+        <div class="kit-section-head">CRISPR-Cas9 Nuclease Assay</div>
+        <div class="kit-items">
+          <div class="kit-item"><div class="kit-dot"></div>Nuclease Buffer 10× (20 µL)</div>
+          <div class="kit-item"><div class="kit-dot"></div>Cas9 Protein — S. pyogenes (25 µL)</div>
+          <div class="kit-item"><div class="kit-dot"></div>sgRNA strips (1 µL each × 8)</div>
+          <div class="kit-item"><div class="kit-dot"></div>RNase A (5 µL)</div>
+          <div class="kit-item"><div class="kit-dot"></div>Proteinase K (5 µL)</div>
+          <div class="kit-item"><div class="kit-dot"></div>Nuclease-free water (500 µL)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Combined reagent + vendor table -->
+  <div class="section-tag" style="margin-bottom:0.75rem">// VENDOR SOURCING &amp; CATALOG NUMBERS</div>
+  <h3 style="font-family:var(--font-head);font-size:1.3rem;font-weight:800;margin-bottom:0.5rem">Reagents, Vendors &amp; Catalog Numbers</h3>
+  <p style="color:var(--muted);font-size:0.87rem;line-height:1.7;max-width:680px;margin-bottom:1.5rem">For independent procurement of all kit components. Prices are approximate list prices — academic discounts and institutional contracts often apply. Always verify catalog numbers on vendor sites before ordering.</p>
+
+  <div class="gene-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Reagent</th>
+          <th>Role in Protocol</th>
+          <th>Vendor</th>
+          <th>Catalog #</th>
+          <th>List Price</th>
+          <th>Notes / Alternatives</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="6" style="background:rgba(0,229,255,0.05);font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.12em;color:var(--accent);text-transform:uppercase;padding:0.6rem 1.2rem">PCR — Target DNA Amplification</td></tr>
+        <tr>
+          <td>2× Taq DNA Polymerase Master Mix</td><td>Amplify 724 bp CCR5 Exon 2 target</td><td>NEB</td>
+          <td><span style="font-family:var(--font-mono);font-size:0.78rem">M0270S</span></td><td>~$55</td>
+          <td>Thermo DreamTaq EP0701 or KAPA2G as alternatives</td>
+        </tr>
+        <tr>
+          <td>Genomic DNA (Human)</td><td>PCR template for CCR5 amplicon</td><td>Promega / Sigma</td>
+          <td><span style="font-family:var(--font-mono);font-size:0.78rem">G1521 / D4642</span></td><td>~$80–$120</td>
+          <td>Cell line gDNA or commercial human reference standard</td>
+        </tr>
+        <tr>
+          <td>PCR Primers (HsCCR5Ex2-gen-F1/R1)</td><td>Amplify CCR5 Exon 2 target substrate (724 bp)</td><td>IDT / Eurofins</td>
+          <td>Custom synthesis</td><td>~$8–$12 each</td>
+          <td>Standard desalt; 25 nmol scale. Sequences shown in primer callout above.</td>
+        </tr>
+        <tr><td colspan="6" style="background:rgba(0,229,255,0.05);font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.12em;color:var(--accent);text-transform:uppercase;padding:0.6rem 1.2rem">dsDNA Template for In Vitro Transcription</td></tr>
+        <tr>
+          <td>Guide-specific oligos (8 unique)</td><td>Encodes T7 promoter + spacer; anneals with tail oligo to form IVT template</td><td>IDT</td>
+          <td>Custom synthesis</td><td>~$10–$18 each</td>
+          <td>Standard desalt; 25 nmol scale. Use Oligo Designer tool (below) for sequence generation.</td>
+        </tr>
+        <tr>
+          <td>Tail oligo (SpCas9 scaffold overhang)</td><td>Universal oligo providing sgRNA scaffold template</td><td>IDT</td>
+          <td>Custom synthesis</td><td>~$18–$25</td>
+          <td>5'-AAAAGCACCGACTCGGTGCCACTTTTTCAAGTTGATAACGGACTAGCCTTATTTTAACTTGCTATTTCTAGCTCTAAAAC-3' · PAGE purification recommended</td>
+        </tr>
+        <tr>
+          <td>T4 DNA Polymerase</td><td>Extends annealed duplex to full-length dsDNA IVT template</td><td>NEB</td>
+          <td><span style="font-family:var(--font-mono);font-size:0.78rem">M0203S</span></td><td>$72</td>
+          <td>Thermo EP0061 as alternative; 3'→5' exonuclease activity must be intact</td>
+        </tr>
+        <tr>
+          <td>dNTP Mix (10 mM each)</td><td>Nucleotides for T4 extension</td><td>NEB / Thermo</td>
+          <td><span style="font-family:var(--font-mono);font-size:0.78rem">N0447S / R0192</span></td><td>~$30–$40</td>
+          <td>Pre-mixed or individual dNTPs; use molecular-grade only</td>
+        </tr>
+        <tr><td colspan="6" style="background:rgba(0,229,255,0.05);font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.12em;color:var(--accent);text-transform:uppercase;padding:0.6rem 1.2rem">In Vitro Transcription (sgRNA Synthesis)</td></tr>
+        <tr>
+          <td>HiScribe® T7 Quick High Yield RNA Synthesis Kit</td><td>T7 RNAP + NTP buffer for sgRNA transcription</td><td>NEB</td>
+          <td><span style="font-family:var(--font-mono);font-size:0.78rem">E2050S</span></td><td>$319</td>
+          <td>Includes T7 RNA Pol Mix + NTP Buffer. MEGAscript T7 (Thermo AM1333) as alternative.</td>
+        </tr>
+        <tr>
+          <td>RNase Inhibitor (Murine)</td><td>Protects sgRNA during IVT</td><td>NEB</td>
+          <td><span style="font-family:var(--font-mono);font-size:0.78rem">M0314S</span></td><td>$65</td>
+          <td>RNaseOUT (Thermo 10777019) or SUPERase-In (Thermo AM2696)</td>
+        </tr>
+        <tr>
+          <td>RNase-free DNase I</td><td>Removes dsDNA template post-transcription</td><td>NEB</td>
+          <td><span style="font-family:var(--font-mono);font-size:0.78rem">M0303S</span></td><td>$60</td>
+          <td>Thermo EN0521; TURBO DNase recommended for complete removal</td>
+        </tr>
+        <tr>
+          <td>NEB Monarch® RNA Cleanup Kit</td><td>Column purification of IVT sgRNA</td><td>NEB</td>
+          <td><span style="font-family:var(--font-mono);font-size:0.78rem">T2030S</span></td><td>$108</td>
+          <td>Zymo RNA Clean &amp; Concentrator-5 (R1013) as alternative</td>
+        </tr>
+        <tr><td colspan="6" style="background:rgba(0,229,255,0.05);font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.12em;color:var(--accent);text-transform:uppercase;padding:0.6rem 1.2rem">CRISPR-Cas9 Nuclease Assay</td></tr>
+        <tr>
+          <td>Cas9 Nuclease, S. pyogenes</td><td>Endonuclease for RNP reconstitution and cleavage</td><td>NEB</td>
+          <td><span style="font-family:var(--font-mono);font-size:0.78rem">M0386S</span></td><td>$55</td>
+          <td>IDT Alt-R® Cas9 (1081059) or Thermo A36497; all SpCas9</td>
+        </tr>
+        <tr>
+          <td>10× Nuclease Assay Buffer</td><td>Reaction buffer for Cas9 RNP cleavage</td><td>NEB</td>
+          <td>Supplied with M0386S</td><td>Included</td>
+          <td>CutSmart Buffer (NEB B6004S) also compatible</td>
+        </tr>
+        <tr>
+          <td>RNase A</td><td>Degrades sgRNA after cleavage (pre-gel)</td><td>Thermo / Sigma</td>
+          <td><span style="font-family:var(--font-mono);font-size:0.78rem">EN0531 / R6513</span></td><td>~$35–$50</td>
+          <td>10 mg/mL stock; dilute to working concentration</td>
+        </tr>
+        <tr>
+          <td>Proteinase K Solution (20 mg/mL)</td><td>Digests Cas9 protein prior to gel analysis</td><td>NEB / Thermo</td>
+          <td><span style="font-family:var(--font-mono);font-size:0.78rem">P8107S / AM2548</span></td><td>~$40–$60</td>
+          <td>Standard molecular grade adequate</td>
+        </tr>
+        <tr>
+          <td>Nuclease-free Water</td><td>All reaction dilutions</td><td>Thermo / Ambion</td>
+          <td><span style="font-family:var(--font-mono);font-size:0.78rem">AM9937</span></td><td>~$15–$25</td>
+          <td>Do NOT use DEPC-treated water (inhibits enzymes)</td>
+        </tr>
+        <tr><td colspan="6" style="background:rgba(0,229,255,0.05);font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.12em;color:var(--accent);text-transform:uppercase;padding:0.6rem 1.2rem">Gel Electrophoresis &amp; Visualization</td></tr>
+        <tr>
+          <td>6% TBE-PAGE Gel (pre-cast)</td><td>Resolves nuclease assay cleavage products</td><td>Thermo / BioRad</td>
+          <td><span style="font-family:var(--font-mono);font-size:0.78rem">EC6265BOX / 3450056</span></td><td>~$100–$130</td>
+          <td>Cast manually: 6% acrylamide in 1× TBE; pre-cast recommended for classroom</td>
+        </tr>
+        <tr>
+          <td>100 bp DNA Ladder</td><td>Molecular weight markers</td><td>NEB</td>
+          <td><span style="font-family:var(--font-mono);font-size:0.78rem">N3231S</span></td><td>$45</td>
+          <td>GeneRuler 100 bp (Thermo SM0241) as alternative</td>
+        </tr>
+        <tr>
+          <td>SYBR® Gold Nucleic Acid Stain</td><td>Fluorescent staining of DNA in PAGE</td><td>Thermo</td>
+          <td><span style="font-family:var(--font-mono);font-size:0.78rem">S11494</span></td><td>$185</td>
+          <td>GelRed (Biotium 41003) as safer alternative</td>
+        </tr>
+        <tr>
+          <td>6× DNA Loading Dye</td><td>Sample preparation for electrophoresis</td><td>NEB</td>
+          <td><span style="font-family:var(--font-mono);font-size:0.78rem">B7024S</span></td><td>$22</td>
+          <td>Any standard loading dye; ensure no SDS</td>
+        </tr>
+        <tr>
+          <td>10× TBE Buffer</td><td>Running buffer for PAGE</td><td>Thermo / Sigma</td>
+          <td><span style="font-family:var(--font-mono);font-size:0.78rem">15581044 / T4415</span></td><td>~$30–$50</td>
+          <td>Prepare in-house: 89 mM Tris, 89 mM boric acid, 2 mM EDTA, pH 8.3</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:0.75rem;color:var(--muted);margin-top:1rem;font-family:var(--font-mono)">⚠ Prices are approximate list prices and vary by institution contract, quantity, and region. Always confirm current catalog numbers with vendor websites before ordering.</p>
+</section>
+
+<!-- GLOSSARY -->
+<section id="glossary">
+  <div class="section-tag">// KEY TERMS</div>
+  <h2>Glossary</h2>
+  <p class="section-lead">Search and explore key concepts from genome editing, molecular biology, and bioethics.</p>
+
+  <div class="glossary-search">
+    <input type="text" id="glossaryInput" placeholder="Search terms..." oninput="filterGlossary(this.value)">
+  </div>
+
+  <div class="glossary-grid" id="glossaryGrid">
+    <div class="glossary-item" data-term="CRISPR"><div class="glossary-term">CRISPR</div><div class="glossary-def">Clustered Regularly Interspaced Short Palindromic Repeats — natural adaptive immunity in prokaryotes, repurposed as a gene editing system.</div></div>
+    <div class="glossary-item" data-term="Cas9"><div class="glossary-term">Cas9</div><div class="glossary-def">CRISPR-associated nuclease 9. An RNA-guided endonuclease from S. pyogenes that introduces site-specific double-strand breaks in DNA.</div></div>
+    <div class="glossary-item" data-term="sgRNA"><div class="glossary-term">sgRNA</div><div class="glossary-def">Single guide RNA — a synthetic fusion of the crRNA (spacer) and tracrRNA scaffold that directs Cas9 to its target sequence.</div></div>
+    <div class="glossary-item" data-term="PAM"><div class="glossary-term">PAM (Protospacer Adjacent Motif)</div><div class="glossary-def">Short sequence required adjacent to the target (NGG for SpCas9). Cas9 cannot cleave without a matching PAM downstream of the target.</div></div>
+    <div class="glossary-item" data-term="CCR5"><div class="glossary-term">CCR5</div><div class="glossary-def">C-C Chemokine Receptor 5. A GPCR expressed on T cells and macrophages. The primary co-receptor for HIV-1 R5 strain entry.</div></div>
+    <div class="glossary-item" data-term="Δ32"><div class="glossary-term">CCR5-Δ32</div><div class="glossary-def">32-bp deletion in CCR5 Exon 1 that creates a frameshift and non-functional receptor — confers natural HIV resistance in homozygotes (~1% N. Europeans).</div></div>
+    <div class="glossary-item" data-term="DSB"><div class="glossary-term">DSB (Double-Strand Break)</div><div class="glossary-def">Both strands of the DNA double helix are cleaved. Cas9 creates blunt-ended DSBs 3 bp upstream of the PAM sequence.</div></div>
+    <div class="glossary-item" data-term="NHEJ"><div class="glossary-term">NHEJ</div><div class="glossary-def">Non-Homologous End Joining — error-prone DSB repair that generates small insertions or deletions (indels), often disrupting protein function.</div></div>
+    <div class="glossary-item" data-term="HDR"><div class="glossary-term">HDR</div><div class="glossary-def">Homology-Directed Repair — precise DSB repair using a template. Enables exact gene correction but is inefficient in most cell types.</div></div>
+    <div class="glossary-item" data-term="RNP"><div class="glossary-term">RNP (Ribonucleoprotein)</div><div class="glossary-def">Cas9 protein pre-complexed with sgRNA before delivery. RNP format reduces off-targets by limiting Cas9 exposure time.</div></div>
+    <div class="glossary-item" data-term="off-target"><div class="glossary-term">Off-Target Effects</div><div class="glossary-def">Unintended edits at genomic sites with sequence similarity to the guide RNA. PAM-proximal mismatches are most predictive of off-target activity.</div></div>
+    <div class="glossary-item" data-term="in vitro transcription"><div class="glossary-term">In Vitro Transcription</div><div class="glossary-def">Cell-free RNA synthesis using T7 RNA Polymerase on a dsDNA template. Used here to produce sgRNAs from oligo-generated templates.</div></div>
+    <div class="glossary-item" data-term="germline"><div class="glossary-term">Germline Editing</div><div class="glossary-def">Editing in reproductive cells or early embryos, making changes heritable. Ethically distinct from somatic editing due to transmission to future generations.</div></div>
+    <div class="glossary-item" data-term="indel"><div class="glossary-term">Indel</div><div class="glossary-def">Insertion or deletion of nucleotides at the CRISPR cut site, often caused by NHEJ. Frame-shifting indels disrupt protein coding sequences.</div></div>
+    <div class="glossary-item" data-term="TBE-PAGE"><div class="glossary-term">TBE-PAGE</div><div class="glossary-def">Tris-Borate-EDTA Polyacrylamide Gel Electrophoresis — recommended for resolving small DNA fragments in this assay (6% gel for optimal resolution).</div></div>
+    <div class="glossary-item" data-term="mismatch"><div class="glossary-term">Mismatch Tolerance</div><div class="glossary-def">The ability of Cas9-sgRNA to cleave targets with non-complementary bases. Tolerates 1–2 PAM-distal mismatches; highly sensitive to seed-region mismatches.</div></div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="section-tag">// KNOWLEDGE CHECK</div>
+  <h2>Self-Assessment Quiz</h2>
+  <p class="section-lead">Test understanding of core concepts from the CRISPR Cuts module.</p>
+
+  <div class="quiz-container">
+    <div class="quiz-progress" id="quizProgress"></div>
+    <div class="quiz-card" id="quizCard">
+      <div class="quiz-q" id="quizQ"></div>
+      <div class="quiz-options" id="quizOpts"></div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <div class="quiz-nav">
+        <span class="quiz-score" id="quizScore">Score: 0 / 0</span>
+        <button class="btn btn-primary" id="quizNext" onclick="nextQuestion()" style="display:none">Next →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">CRISPRCuts ✂ · CCR5 Module</div>
+  <div class="footer-note">Educational resource derived from the CRISPR Cuts Laboratory Manual (Revised July 2025). Designed for undergraduate and advanced high school biology courses. All external links are for educational reference.</div>
+</footer>
+
+<script>
+// ACTIVITY QUIZ DROPDOWNS
+function checkActivity(sel) {
+  const answer = sel.dataset.answer;
+  const chosen = sel.value;
+  const fb = sel.nextElementSibling;
+  if (!chosen) { sel.className='activity-quiz'; fb.textContent=''; fb.className='activity-feedback'; return; }
+  if (chosen === answer) {
+    sel.className='activity-quiz correct';
+    fb.textContent='✓ Correct!';
+    fb.className='activity-feedback ok';
+  } else {
+    sel.className='activity-quiz incorrect';
+    fb.textContent='✗ Try again';
+    fb.className='activity-feedback no';
+  }
+}
+
+// GLOSSARY FILTER
+function filterGlossary(query) {
+  const q = query.toLowerCase();
+  document.querySelectorAll('.glossary-item').forEach(item => {
+    const term = item.dataset.term.toLowerCase();
+    const def = item.querySelector('.glossary-def').textContent.toLowerCase();
+    item.classList.toggle('hidden', q && !term.includes(q) && !def.includes(q));
+  });
+}
+
+// QUIZ
+const questions = [
+  {
+    q: "Which genomic feature must be present adjacent to the target site for SpCas9 to cleave?",
+    opts: ["A T7 promoter sequence", "An NGG protospacer adjacent motif (PAM)", "A CpG island", "An exon-intron boundary"],
+    ans: 1,
+    feedback: "SpCas9 requires an NGG PAM immediately 3' of the target sequence. Without a PAM, Cas9 cannot bind and cleave — this is a fundamental mechanistic requirement."
+  },
+  {
+    q: "Where in the CCR5 gene does Guide JK and Guide 1 target for cleavage?",
+    opts: ["CCR5 Intron 1", "CCR5 Exon 2", "CCR5 Exon 3", "The CCR5 promoter region"],
+    ans: 1,
+    feedback: "Both guides target CCR5 Exon 2, the 169 bp second coding exon. The 724 bp PCR amplicon spanning this exon serves as the substrate DNA in the nuclease assay."
+  },
+  {
+    q: "A mismatch at position 9 of the guide RNA (counting from the 5' end, with position 1 being PAM-distal) would most likely result in:",
+    opts: [
+      "No effect on cleavage — mismatches are always tolerated",
+      "Slightly reduced cleavage due to PAM-distal tolerance",
+      "Severely reduced or abolished cleavage — this is within the PAM-proximal seed region",
+      "Enhanced cleavage due to reduced sgRNA stability"
+    ],
+    ans: 2,
+    feedback: "Positions 11–20 (near the PAM, at the 3' end of the spacer) are PAM-proximal and form the 'seed region.' Position 9 counted from the 5' end = position 12 from PAM, which is PAM-proximal — mismatches here strongly reduce Cas9 activity. Note: position 1 is the 5'-most (PAM-distal) nucleotide."
+  },
+  {
+    q: "In the Jiankui He experiment, which of the following was the primary scientific rationale for targeting CCR5?",
+    opts: [
+      "CCR5 Δ32 homozygotes have resistance to HIV-1 R5 strain infection",
+      "CCR5 is overexpressed in HIV-infected T cells",
+      "CCR5 codes for the HIV capsid protein",
+      "CCR5 is a tumor suppressor that protects against AIDS-related cancers"
+    ],
+    ans: 0,
+    feedback: "CCR5-Δ32 homozygotes (~1% of N. Europeans) lack functional CCR5 receptor and are highly resistant to HIV-1 R5 entry. He aimed to replicate this natural variant in embryos."
+  },
+  {
+    q: "What is the purpose of the Proteinase K treatment step in the nuclease assay?",
+    opts: [
+      "To degrade the target DNA after cleavage",
+      "To remove RNase A that was added in a previous step",
+      "To degrade the Cas9 protein so it no longer interferes with gel analysis",
+      "To linearize the PCR product prior to electrophoresis"
+    ],
+    ans: 2,
+    feedback: "Proteinase K digests Cas9 protein. If Cas9 remains bound to DNA, it can obscure cleavage products on a gel. After Proteinase K treatment, cleaved DNA fragments migrate freely and accurately."
+  },
+  {
+    q: "Which repair pathway would you favor if your goal is precise gene correction (e.g., fixing a disease-causing SNP)?",
+    opts: ["NHEJ — it is faster and more active", "HDR — it uses a donor template for precise editing", "Both pathways equally", "Neither — CRISPR does not require repair"],
+    ans: 1,
+    feedback: "HDR (Homology-Directed Repair) uses a supplied donor template to introduce precise edits. While less efficient than NHEJ, it is required for accurate sequence correction rather than simple disruption."
+  }
+];
+
+let current = 0, score = 0, answered = false;
+
+function buildProgress() {
+  const p = document.getElementById('quizProgress');
+  p.innerHTML = '';
+  questions.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'quiz-dot' + (i < current ? ' done' : i === current ? ' active' : '');
+    p.appendChild(d);
+  });
+}
+
+function loadQuestion() {
+  if (current >= questions.length) {
+    document.getElementById('quizCard').innerHTML = `
+      <div style="text-align:center;padding:1rem">
+        <div style="font-size:3rem;margin-bottom:1rem">🎉</div>
+        <div style="font-family:var(--font-head);font-size:1.8rem;font-weight:800;color:var(--accent);margin-bottom:0.5rem">${score} / ${questions.length}</div>
+        <div style="color:var(--muted);margin-bottom:1.5rem">${score === questions.length ? 'Perfect score — excellent work!' : score >= 4 ? 'Strong understanding of core concepts.' : 'Review the module and try again.'}</div>
+        <button class="btn btn-primary" onclick="restartQuiz()">Retake Quiz</button>
+      </div>`;
+    return;
+  }
+  answered = false;
+  const q = questions[current];
+  document.getElementById('quizQ').textContent = q.q;
+  const opts = document.getElementById('quizOpts');
+  opts.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-option';
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(i);
+    opts.appendChild(btn);
+  });
+  document.getElementById('quizFeedback').textContent = '';
+  document.getElementById('quizFeedback').classList.remove('show');
+  document.getElementById('quizNext').style.display = 'none';
+  document.getElementById('quizScore').textContent = `Score: ${score} / ${current}`;
+  buildProgress();
+}
+
+function selectAnswer(i) {
+  if (answered) return;
+  answered = true;
+  const q = questions[current];
+  const opts = document.querySelectorAll('.quiz-option');
+  opts.forEach((btn, idx) => {
+    if (idx === q.ans) btn.classList.add('correct');
+    else if (idx === i) btn.classList.add('incorrect');
+    btn.style.pointerEvents = 'none';
+  });
+  if (i === q.ans) score++;
+  document.getElementById('quizFeedback').textContent = q.feedback;
+  document.getElementById('quizFeedback').classList.add('show');
+  document.getElementById('quizNext').style.display = 'inline-flex';
+  document.getElementById('quizScore').textContent = `Score: ${score} / ${current + 1}`;
+}
+
+function nextQuestion() {
+  current++;
+  loadQuestion();
+}
+
+function restartQuiz() {
+  current = 0; score = 0;
+  document.getElementById('quizCard').innerHTML = `
+    <div class="quiz-q" id="quizQ"></div>
+    <div class="quiz-options" id="quizOpts"></div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+    <div class="quiz-nav">
+      <span class="quiz-score" id="quizScore">Score: 0 / 0</span>
+      <button class="btn btn-primary" id="quizNext" onclick="nextQuestion()" style="display:none">Next →</button>
+    </div>`;
+  loadQuestion();
+}
+
+loadQuestion();
+</script>
+
+<!-- OLIGO DESIGNER -->
+<section id="oligo" style="background:var(--surface)">
+  <div class="section-tag">// IVT OLIGO DESIGN TOOL</div>
+  <h2>sgRNA Oligo Designer</h2>
+  <p class="section-lead">Generate synthesis-ready oligonucleotide sequences for dsDNA IVT template production. Enter a 20-nt spacer sequence and get formatted oligos ready to submit to IDT or any synthesis vendor.</p>
+
+  <div style="max-width:820px">
+
+    <!-- Architecture diagram -->
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:2rem;font-family:var(--font-mono);font-size:0.75rem;">
+      <div style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem">Full Guide Oligo Architecture (5'→3')</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0;align-items:stretch;border-radius:6px;overflow:hidden;margin-bottom:0.75rem">
+        <div style="background:rgba(124,58,237,0.25);border:1px solid rgba(124,58,237,0.5);padding:0.5rem 0.75rem;flex:0 0 auto">
+          <div style="font-size:0.6rem;color:#a78bfa;margin-bottom:2px">LEADER (5 nt) + T7 PROMOTER (17 nt) = 22 nt</div>
+          <div style="color:#c4b5fd;letter-spacing:0.03em;font-size:0.72rem"><span style="border-bottom:2px solid #a78bfa">CAGAC</span>TAATACGACTCACTATA</div>
+        </div>
+        <div style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.4);padding:0.5rem 0.75rem;flex:0 0 auto">
+          <div style="font-size:0.6rem;color:var(--warn);margin-bottom:2px">[GG if needed]</div>
+          <div style="color:var(--warn);font-size:0.72rem">GG</div>
+        </div>
+        <div style="background:rgba(0,229,255,0.1);border:1px solid var(--border);padding:0.5rem 0.75rem;flex:1 1 auto">
+          <div style="font-size:0.6rem;color:var(--accent);margin-bottom:2px">TARGET / SPACER (20 nt)</div>
+          <div style="color:var(--text);font-size:0.72rem">N₂₀</div>
+        </div>
+        <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);padding:0.5rem 0.75rem;flex:0 0 auto">
+          <div style="font-size:0.6rem;color:var(--accent3);margin-bottom:2px">TAIL OVERHANG (15 nt)</div>
+          <div style="color:#6ee7b7;letter-spacing:0.03em;font-size:0.72rem">GTTTTAGAGCTAGAA</div>
+        </div>
+      </div>
+      <div style="font-size:0.68rem;color:var(--muted);line-height:1.65">
+        The <span style="color:#c4b5fd">Leader + T7 Promoter</span> = CAGAC (5 nt leader) + TAATACGACTCACTATA (17 nt T7 promoter) = 22 nt total.
+        <span style="color:var(--warn)">GG</span> is appended after the promoter only if the spacer does not begin with GG — required for efficient T7 transcription initiation.
+        The <span style="color:#6ee7b7">15-nt tail overhang</span> (GTTTTAGAGCTAGAA) anneals to the universal SpCas9 scaffold tail oligo; T4 DNA Polymerase extends the duplex to generate the complete dsDNA IVT template.
+      </div>
+    </div>
+
+    <!-- Kit Guide Quick-Load -->
+    <div style="background:var(--surface2);border:1px solid rgba(124,58,237,0.25);border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:1.5rem">
+      <div style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:#a78bfa;margin-bottom:0.85rem">Quick-Load Kit Guides — Click any guide to populate designer</div>
+      <div id="kitGuideButtons" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem"></div>
+      <div style="overflow-x:auto;border:1px solid var(--border);border-radius:8px">
+        <table style="font-size:0.78rem;width:100%;min-width:680px">
+          <thead><tr>
+            <th style="padding:0.5rem 0.85rem;text-align:left;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--accent);background:rgba(0,229,255,0.05);border-bottom:1px solid var(--border);white-space:nowrap">#</th>
+            <th style="padding:0.5rem 0.85rem;text-align:left;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--accent);background:rgba(0,229,255,0.05);border-bottom:1px solid var(--border);white-space:nowrap">Guide</th>
+            <th style="padding:0.5rem 0.85rem;text-align:left;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--accent);background:rgba(0,229,255,0.05);border-bottom:1px solid var(--border);white-space:nowrap">Spacer (5'→3')</th>
+            <th style="padding:0.5rem 0.85rem;text-align:left;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--accent);background:rgba(0,229,255,0.05);border-bottom:1px solid var(--border);white-space:nowrap">GG?</th>
+            <th style="padding:0.5rem 0.85rem;text-align:left;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--accent);background:rgba(0,229,255,0.05);border-bottom:1px solid var(--border)">Annotated Assembly View (5'→3')</th>
+          </tr></thead>
+          <tbody id="kitGuideTableBody"></tbody>
+        </table>
+      </div>
+      <!-- Legend -->
+      <div style="margin-top:0.85rem;padding:0.7rem 1rem;background:rgba(0,0,0,0.2);border:1px solid var(--border);border-radius:6px;display:flex;flex-wrap:wrap;gap:1.25rem;font-size:0.72rem;font-family:var(--font-mono)">
+        <span><span style="color:#c4b5fd">■</span> Leader + T7 promoter</span>
+        <span><span style="color:var(--warn)">■</span> GG insert (if added)</span>
+        <span><span style="color:var(--accent)">■</span> Spacer / target</span>
+        <span><span style="color:#6ee7b7">■</span> Tail overhang</span>
+        <span style="color:var(--muted);margin-left:auto">Red = mismatch vs. Guide JK (MM guides only)</span>
+      </div>
+    </div>
+
+    <!-- Input form -->
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:2rem;margin-bottom:1.5rem">
+      <div style="margin-bottom:1.25rem">
+        <label style="display:block;font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.5rem">Guide Name / ID</label>
+        <input id="guideName" type="text" placeholder="e.g. Guide JK, CCR5-g1, MyTarget-01..."
+          style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.65rem 1rem;color:var(--text);font-family:var(--font-body);font-size:0.9rem;outline:none;transition:border-color 0.2s"
+          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div style="margin-bottom:1.25rem">
+        <label style="display:block;font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.5rem">Target / Spacer Sequence (20 nt, DNA, 5'→3')</label>
+        <input id="spacerInput" type="text" maxlength="20" placeholder="e.g. CAGAATTGATACTGACTGTA"
+          style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.65rem 1rem;color:var(--text);font-family:var(--font-mono);font-size:0.9rem;letter-spacing:0.08em;outline:none;transition:border-color 0.2s;text-transform:uppercase"
+          oninput="oligoValidateSpacer(this)" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"
+          onkeydown="if(event.key==='Enter')generateOligo()">
+        <div id="spacerStatus" style="margin-top:0.4rem;font-size:0.75rem;font-family:var(--font-mono);color:var(--muted)">Enter a 20-nt DNA sequence (A, T, G, C only)</div>
+      </div>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="generateOligo()">▸ Generate Oligos</button>
+        <button class="btn btn-secondary" onclick="clearOligo()">Clear</button>
+        <button class="btn btn-secondary" onclick="loadDemo()">↓ Load Guide JK (Demo)</button>
+      </div>
+    </div>
+
+    <!-- Output -->
+    <div id="oligoOutput" style="display:none">
+      <div id="ggBanner" style="display:none;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.4);border-radius:8px;padding:0.85rem 1.2rem;margin-bottom:1.25rem;font-size:0.83rem;color:var(--warn);font-family:var(--font-mono)">
+        ⚠ Spacer does not begin with GG — inserting <strong>GG</strong> after T7 promoter to ensure efficient T7 transcription initiation.
+      </div>
+      <div id="ggOkBanner" style="display:none;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.3);border-radius:8px;padding:0.85rem 1.2rem;margin-bottom:1.25rem;font-size:0.83rem;color:var(--accent3);font-family:var(--font-mono)">
+        ✓ Spacer begins with GG — no additional nucleotides needed for T7 initiation.
+      </div>
+
+      <!-- Guide oligo -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:0.85rem 1.25rem;border-bottom:1px solid var(--border);background:rgba(0,229,255,0.05);flex-wrap:wrap;gap:0.5rem">
+          <div>
+            <span style="font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent)">Guide Oligo</span>
+            <span id="guideOligoLabel" style="font-family:var(--font-mono);font-size:0.72rem;color:var(--muted);margin-left:0.75rem"></span>
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center">
+            <span id="guideOligoLen" style="font-family:var(--font-mono);font-size:0.7rem;color:var(--muted)"></span>
+            <button onclick="oligoCopy('guideOligoSeq',this)" class="btn btn-secondary" style="padding:0.3rem 0.7rem;font-size:0.7rem">Copy</button>
+          </div>
+        </div>
+        <div style="padding:1.1rem 1.25rem">
+          <div style="font-family:var(--font-mono);font-size:0.82rem;letter-spacing:0.06em;line-height:2;word-break:break-all" id="guideOligoSeqDisplay"></div>
+          <textarea id="guideOligoSeq" style="display:none"></textarea>
+        </div>
+      </div>
+
+      <!-- Tail oligo (static) -->
+      <div style="background:var(--surface2);border:1px solid rgba(16,185,129,0.3);border-radius:10px;overflow:hidden;margin-bottom:1rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:0.85rem 1.25rem;border-bottom:1px solid rgba(16,185,129,0.2);background:rgba(16,185,129,0.05);flex-wrap:wrap;gap:0.5rem">
+          <div>
+            <span style="font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent3)">SpCas9 Tail Oligo</span>
+            <span style="font-family:var(--font-mono);font-size:0.72rem;color:var(--muted);margin-left:0.75rem">(universal — shared across all guides)</span>
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center">
+            <span style="font-family:var(--font-mono);font-size:0.7rem;color:var(--muted)">80 nt</span>
+            <button onclick="oligoCopy('tailOligoSeqEl',this)" class="btn btn-secondary" style="padding:0.3rem 0.7rem;font-size:0.7rem">Copy</button>
+          </div>
+        </div>
+        <div style="padding:1.1rem 1.25rem">
+          <div style="font-family:var(--font-mono);font-size:0.78rem;letter-spacing:0.06em;line-height:2;word-break:break-all;color:#6ee7b7">AAAAGCACCGACTCGGTGCCACTTTTTCAAGTTGATAACGGACTAGCCTTATTTTAACTTGCTATTTCTAGCTCTAAAAC</div>
+          <textarea id="tailOligoSeqEl" style="display:none">AAAAGCACCGACTCGGTGCCACTTTTTCAAGTTGATAACGGACTAGCCTTATTTTAACTTGCTATTTCTAGCTCTAAAAC</textarea>
+
+      <!-- Annotated assembly -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1rem">
+        <div style="padding:0.85rem 1.25rem;border-bottom:1px solid var(--border);background:rgba(124,58,237,0.05)">
+          <span style="font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:#a78bfa">Annotated Assembly View</span>
+        </div>
+        <div style="padding:1.25rem;font-family:var(--font-mono);font-size:0.78rem;line-height:2;word-break:break-all" id="annotatedView"></div>
+        <div style="padding:0.75rem 1.25rem;border-top:1px solid var(--border);font-size:0.72rem;color:var(--muted);font-family:var(--font-mono)">
+          Color coding: <span style="color:#c4b5fd">■ Leader+T7</span> &nbsp;<span style="color:var(--warn)">■ GG</span> &nbsp;<span style="color:var(--accent)">■ Spacer</span> &nbsp;<span style="color:#6ee7b7">■ Tail</span> — see kit guide table above for full legend
+        </div>
+      </div>
+
+      <!-- Order summary table -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1.5rem">
+        <div style="padding:0.85rem 1.25rem;border-bottom:1px solid var(--border);background:rgba(0,229,255,0.05)">
+          <span style="font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent)">Synthesis Order Summary</span>
+        </div>
+        <div style="overflow-x:auto;padding:1.25rem">
+          <table style="font-size:0.82rem;min-width:600px">
+            <thead><tr>
+              <th style="text-align:left;padding:0.5rem 0.75rem;background:rgba(0,229,255,0.06);border-bottom:1px solid var(--border);font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.08em;color:var(--accent)">Oligo</th>
+              <th style="text-align:left;padding:0.5rem 0.75rem;background:rgba(0,229,255,0.06);border-bottom:1px solid var(--border);font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.08em;color:var(--accent)">Length</th>
+              <th style="text-align:left;padding:0.5rem 0.75rem;background:rgba(0,229,255,0.06);border-bottom:1px solid var(--border);font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.08em;color:var(--accent)">Scale</th>
+              <th style="text-align:left;padding:0.5rem 0.75rem;background:rgba(0,229,255,0.06);border-bottom:1px solid var(--border);font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.08em;color:var(--accent)">Purification</th>
+              <th style="text-align:left;padding:0.5rem 0.75rem;background:rgba(0,229,255,0.06);border-bottom:1px solid var(--border);font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.08em;color:var(--accent)">Notes</th>
+            </tr></thead>
+            <tbody id="orderTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="exportFASTA()">↓ Download FASTA</button>
+        <button class="btn btn-secondary" onclick="exportCSV()">↓ Download CSV (Order Sheet)</button>
+      </div>
+    </div>
+
+    <!-- Batch mode -->
+    <div style="margin-top:3rem;background:var(--surface2);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+      <div style="padding:1rem 1.5rem;border-bottom:1px solid var(--border);background:rgba(0,229,255,0.04);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem">
+        <div>
+          <div style="font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent)">Batch Designer</div>
+          <div style="font-size:0.8rem;color:var(--muted);margin-top:0.2rem">Process multiple guides at once — one per line: <code style="font-family:var(--font-mono);font-size:0.75rem;background:var(--surface);padding:0.1rem 0.4rem;border-radius:3px">GuideName,SPACERSEQUENCE</code></div>
+        </div>
+        <button class="btn btn-secondary" onclick="toggleBatch()" id="batchToggle" style="font-size:0.75rem;padding:0.4rem 0.9rem">Show Batch Mode</button>
+      </div>
+      <div id="batchPanel" style="display:none;padding:1.5rem">
+        <textarea id="batchInput" rows="6"
+          placeholder="Guide JK,CAGAATTGATACTGACTGTA&#10;Guide 1,TCACTATGCTGCCGCCCAGT&#10;MM1,CAAAATTGATACTGACTGTA"
+          style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.75rem 1rem;color:var(--text);font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.05em;outline:none;resize:vertical;line-height:1.8"
+          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+        <div style="display:flex;gap:0.75rem;margin-top:1rem;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="runBatch()">▸ Process Batch</button>
+          <button class="btn btn-secondary" onclick="loadBatchDemo()">Load All 8 Module Guides</button>
+        </div>
+        <div id="batchOutput" style="margin-top:1.5rem"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+// ─── OLIGO DESIGNER ───
+// Leader = 5-nt leader (CAGAC) + 17-nt T7 promoter (TAATACGACTCACTATA) = 22 nt total
+const OLIGO_LEADER = 'CAGACTAATACGACTCACTATA';
+// Tail overhang = 15 nt (partial sgRNA scaffold for annealing to SpCas9 tail oligo)
+const OLIGO_TAIL   = 'GTTTTAGAGCTAGAA';
+const SPCAS9_TAIL  = 'AAAAGCACCGACTCGGTGCCACTTTTTCAAGTTGATAACGGACTAGCCTTATTTTAACTTGCTATTTCTAGCTCTAAAAC';
+
+// All 8 kit guides
+const KIT_GUIDES = [
+  { name:'Guide 1',      spacer:'TCACTATGCTGCCGCCCAGT' },
+  { name:'Guide JK',     spacer:'CAGAATTGATACTGACTGTA' },
+  { name:'Mismatch #1',  spacer:'CAAAATTGATACTGACTGTA' },
+  { name:'Mismatch #2',  spacer:'CAGAATTGATACTGACTATA' },
+  { name:'Mismatch #3',  spacer:'CAGAATTGATGCTGACTGTA' },
+  { name:'Mismatch #4',  spacer:'CAAAATTGATACTGACTATA' },
+  { name:'Mismatch #5',  spacer:'CAGAATTGACGCTGACTGTA' },
+  { name:'Mismatch #6',  spacer:'CAAAATTGATGCTGACTATA' },
+];
+
+function oligoNeedsGG(spacer){ return !spacer.startsWith('GG'); }
+
+function oligoBuildGuide(spacer){
+  return OLIGO_LEADER + (oligoNeedsGG(spacer)?'GG':'') + spacer + OLIGO_TAIL;
+}
+
+function oligoColorAnnotated(spacer){
+  const gg = oligoNeedsGG(spacer)?'GG':'';
+  let h='';
+  h+=`<span style="color:#c4b5fd">${OLIGO_LEADER}</span>`;
+  if(gg) h+=`<span style="color:var(--warn)">${gg}</span>`;
+  h+=`<span style="color:var(--accent)">${spacer}</span>`;
+  h+=`<span style="color:#6ee7b7">${OLIGO_TAIL}</span>`;
+  return h;
+}
+
+function oligoValidateSpacer(input){
+  const val=input.value.toUpperCase().replace(/[^ATGC]/g,'');
+  input.value=val;
+  const st=document.getElementById('spacerStatus');
+  if(!val){st.textContent='Enter a 20-nt DNA sequence (A, T, G, C only)';st.style.color='var(--muted)';return;}
+  if(val.length<20){st.textContent=`${val.length}/20 nt — keep typing`;st.style.color='var(--warn)';}
+  else{st.textContent='✓ 20 nt — ready to generate';st.style.color='var(--accent3)';}
+}
+
+function generateOligo(){
+  const spacer=document.getElementById('spacerInput').value.toUpperCase().trim();
+  const name=document.getElementById('guideName').value.trim()||'Guide';
+  if(spacer.length!==20||/[^ATGC]/.test(spacer)){alert('Please enter a valid 20-nt DNA spacer (A,T,G,C only).');return;}
+  const gg=oligoNeedsGG(spacer);
+  const guideOligo=oligoBuildGuide(spacer);
+
+  document.getElementById('ggBanner').style.display=gg?'block':'none';
+  document.getElementById('ggOkBanner').style.display=gg?'none':'block';
+  document.getElementById('guideOligoLabel').textContent=name;
+  document.getElementById('guideOligoLen').textContent=`${guideOligo.length} nt`;
+  document.getElementById('guideOligoSeqDisplay').textContent=guideOligo;
+  document.getElementById('guideOligoSeq').value=guideOligo;
+  document.getElementById('annotatedView').innerHTML=oligoColorAnnotated(spacer);
+
+  document.getElementById('orderTableBody').innerHTML=`
+    <tr>
+      <td style="padding:0.5rem 0.75rem;color:var(--text)">${name} — guide oligo</td>
+      <td style="padding:0.5rem 0.75rem;font-family:var(--font-mono)">${guideOligo.length} nt</td>
+      <td style="padding:0.5rem 0.75rem">25 nmol</td>
+      <td style="padding:0.5rem 0.75rem">Standard desalt</td>
+      <td style="padding:0.5rem 0.75rem;color:var(--muted);font-size:0.78rem">Unique per target; one per guide</td>
+    </tr>
+    <tr>
+      <td style="padding:0.5rem 0.75rem;color:var(--accent3)">SpCas9 tail oligo (universal)</td>
+      <td style="padding:0.5rem 0.75rem;font-family:var(--font-mono)">80 nt</td>
+      <td style="padding:0.5rem 0.75rem">25–100 nmol</td>
+      <td style="padding:0.5rem 0.75rem">PAGE purification</td>
+      <td style="padding:0.5rem 0.75rem;color:var(--muted);font-size:0.78rem">Order once — shared across all guides</td>
+    </tr>`;
+
+  document.getElementById('oligoOutput').style.display='block';
+  document.getElementById('oligoOutput').scrollIntoView({behavior:'smooth',block:'nearest'});
+  window._oligoExport={name,spacer,guideOligo,gg};
+}
+
+function oligoCopy(id,btn){
+  const el=document.getElementById(id);
+  const val=el.value||el.textContent;
+  navigator.clipboard.writeText(val.trim()).then(()=>{
+    const o=btn.textContent;btn.textContent='Copied!';btn.style.color='var(--accent3)';
+    setTimeout(()=>{btn.textContent=o;btn.style.color='';},1500);
+  });
+}
+
+function clearOligo(){
+  document.getElementById('spacerInput').value='';
+  document.getElementById('guideName').value='';
+  document.getElementById('spacerStatus').textContent='Enter a 20-nt DNA sequence (A, T, G, C only)';
+  document.getElementById('spacerStatus').style.color='var(--muted)';
+  document.getElementById('oligoOutput').style.display='none';
+}
+
+function loadDemo(){
+  document.getElementById('guideName').value='Guide JK';
+  const inp=document.getElementById('spacerInput');
+  inp.value='CAGAATTGATACTGACTGTA';
+  oligoValidateSpacer(inp);
+  generateOligo();
+}
+
+function oligoDownload(filename,content){
+  const a=document.createElement('a');
+  a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(content);
+  a.download=filename;a.click();
+}
+
+function exportFASTA(){
+  if(!window._oligoExport)return;
+  const{name,guideOligo}=window._oligoExport;
+  oligoDownload('oligos.fasta',`>${name}_guide_oligo\n${guideOligo}\n\n>SpCas9_tail_oligo_universal\n${SPCAS9_TAIL}\n`);
+}
+
+function exportCSV(){
+  if(!window._oligoExport)return;
+  const{name,guideOligo,gg}=window._oligoExport;
+  const rows=[
+    ["Oligo Name","Sequence (5'->3')","Length (nt)","GG Added","Scale","Purification","Notes"],
+    [`${name}_guide_oligo`,guideOligo,guideOligo.length,gg?'Yes':'No','25 nmol','Standard desalt','Guide-specific'],
+    ['SpCas9_tail_oligo_universal',SPCAS9_TAIL,SPCAS9_TAIL.length,'N/A','25-100 nmol','PAGE purification','Universal — order once']
+  ];
+  oligoDownload('oligo_order.csv',rows.map(r=>r.map(x=>`"${x}"`).join(',')).join('\n'));
+}
+
+function toggleBatch(){
+  const p=document.getElementById('batchPanel');
+  const btn=document.getElementById('batchToggle');
+  const open=p.style.display==='block';
+  p.style.display=open?'none':'block';
+  btn.textContent=open?'Show Batch Mode':'Hide Batch Mode';
+}
+
+function loadBatchDemo(){
+  document.getElementById('batchInput').value=KIT_GUIDES.map(g=>`${g.name},${g.spacer}`).join('\n');
+}
+
+function runBatch(){
+  const raw=document.getElementById('batchInput').value.trim();
+  if(!raw)return;
+  const lines=raw.split('\n').map(l=>l.trim()).filter(Boolean);
+  const results=[],errors=[];
+  lines.forEach((line,i)=>{
+    const parts=line.split(',');
+    if(parts.length<2){errors.push(`Line ${i+1}: missing comma separator`);return;}
+    const name=parts[0].trim();
+    const spacer=parts[1].trim().toUpperCase();
+    if(spacer.length!==20||/[^ATGC]/.test(spacer)){errors.push(`Line ${i+1} (${name}): invalid spacer`);return;}
+    results.push({name,spacer,oligo:oligoBuildGuide(spacer),gg:oligoNeedsGG(spacer)});
+  });
+
+  let html='';
+  if(errors.length) html+=`<div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:1rem;margin-bottom:1rem;font-family:var(--font-mono);font-size:0.78rem;color:#f87171">${errors.join('<br>')}</div>`;
+
+  if(results.length){
+    const fastaLines=results.map(r=>`>${r.name}_guide_oligo\n${r.oligo}`).join('\n\n')+`\n\n>SpCas9_tail_oligo_universal\n${SPCAS9_TAIL}`;
+    const csvLines=["Oligo Name,Sequence,Length,GG Added,Scale,Purification",
+      ...results.map(r=>`"${r.name}_guide_oligo","${r.oligo}",${r.oligo.length},${r.gg?'Yes':'No'},25 nmol,Standard desalt`),
+      `"SpCas9_tail_oligo_universal","${SPCAS9_TAIL}",${SPCAS9_TAIL.length},N/A,25-100 nmol,PAGE purification`
+    ].join('\n');
+
+    html+=`<div style="overflow-x:auto;border:1px solid var(--border);border-radius:8px;margin-bottom:1rem"><table style="font-size:0.78rem;width:100%;min-width:600px">
+      <thead><tr>
+        ${['Guide','Spacer','GG?','Length','Full Guide Oligo (5\'→3\')'].map(h=>`<th style="padding:0.6rem 1rem;text-align:left;font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--accent);background:rgba(0,229,255,0.06);border-bottom:1px solid var(--border)">${h}</th>`).join('')}
+      </tr></thead><tbody>
+      ${results.map(r=>`<tr>
+        <td style="padding:0.55rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--text)">${r.name}</td>
+        <td style="padding:0.55rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04);font-family:var(--font-mono);font-size:0.75rem;color:var(--accent)">${r.spacer}</td>
+        <td style="padding:0.55rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04)">${r.gg?'<span style="color:var(--warn);font-family:var(--font-mono);font-size:0.75rem">+GG</span>':'<span style="color:var(--accent3);font-family:var(--font-mono);font-size:0.75rem">no</span>'}</td>
+        <td style="padding:0.55rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04);font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)">${r.oligo.length} nt</td>
+        <td style="padding:0.55rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04);font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);word-break:break-all;max-width:300px">${r.oligo}</td>
+      </tr>`).join('')}
+      </tbody></table></div>`;
+
+    const encF=encodeURIComponent(fastaLines);
+    const encC=encodeURIComponent(csvLines);
+    html+=`<div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="oligoDownload('batch_oligos.fasta',decodeURIComponent('${encF}'))">↓ Download All FASTA</button>
+      <button class="btn btn-secondary" onclick="oligoDownload('batch_oligo_order.csv',decodeURIComponent('${encC}'))">↓ Download Order CSV</button>
+    </div>`;
+  }
+  document.getElementById('batchOutput').innerHTML=html;
+}
+
+// ─── KIT GUIDE TABLE & QUICK-LOAD BUTTONS ───
+
+function initKitGuides(){
+  // Quick-load buttons
+  const btnContainer=document.getElementById('kitGuideButtons');
+  KIT_GUIDES.forEach((g)=>{
+    const btn=document.createElement('button');
+    btn.className='btn btn-secondary';
+    btn.style.cssText='font-size:0.72rem;padding:0.35rem 0.75rem;font-family:var(--font-mono)';
+    btn.textContent=g.name;
+    btn.onclick=()=>{
+      document.getElementById('guideName').value=g.name;
+      const inp=document.getElementById('spacerInput');
+      inp.value=g.spacer;
+      oligoValidateSpacer(inp);
+      generateOligo();
+      document.getElementById('oligoOutput').scrollIntoView({behavior:'smooth',block:'start'});
+    };
+    btnContainer.appendChild(btn);
+  });
+
+  // Build annotated assembly for a spacer — returns HTML string
+  // guideIndex: 0 = Guide 1 (no MM), 1 = Guide JK (reference), 2–7 = MM variants vs JK
+  function buildAnnotatedHTML(spacer, guideIndex) {
+    const gg = oligoNeedsGG(spacer) ? 'GG' : '';
+    const jk = KIT_GUIDES[1].spacer; // reference for MM comparison
+
+    // Only compare against JK for MM guides (index 2+); controls get all-cyan spacer
+    const spacerHTML = spacer.split('').map((c, i) => {
+      const isMismatch = guideIndex >= 2 && c !== jk[i];
+      return isMismatch
+        ? `<span style="color:#ef4444;font-weight:700">${c}</span>`
+        : `<span style="color:var(--accent)">${c}</span>`;
+    }).join('');
+
+    return [
+      `<span style="color:#c4b5fd">${OLIGO_LEADER}</span>`,
+      gg ? `<span style="color:var(--warn)">${gg}</span>` : '',
+      spacerHTML,
+      `<span style="color:#6ee7b7">${OLIGO_TAIL}</span>`
+    ].join('');
+  }
+
+  // Reference table with annotated assembly
+  const tbody = document.getElementById('kitGuideTableBody');
+  KIT_GUIDES.forEach((g, i) => {
+    const gg = oligoNeedsGG(g.spacer);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="padding:0.5rem 0.85rem;border-bottom:1px solid rgba(255,255,255,0.04);font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)">${i+1}</td>
+      <td style="padding:0.5rem 0.85rem;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--text);white-space:nowrap;font-weight:500">${g.name}</td>
+      <td style="padding:0.5rem 0.85rem;border-bottom:1px solid rgba(255,255,255,0.04);font-family:var(--font-mono);font-size:0.78rem;letter-spacing:0.06em;color:var(--accent)">${g.spacer}</td>
+      <td style="padding:0.5rem 0.85rem;border-bottom:1px solid rgba(255,255,255,0.04);text-align:center">${gg ? '<span style="color:var(--warn);font-family:var(--font-mono);font-size:0.72rem;font-weight:700">+GG</span>' : '<span style="color:var(--accent3);font-family:var(--font-mono);font-size:0.72rem">—</span>'}</td>
+      <td style="padding:0.5rem 0.85rem;border-bottom:1px solid rgba(255,255,255,0.04);font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.04em;word-break:break-all;line-height:1.8">${buildAnnotatedHTML(g.spacer, i)}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+initKitGuides();
+</script>
+</body>
+</html>
